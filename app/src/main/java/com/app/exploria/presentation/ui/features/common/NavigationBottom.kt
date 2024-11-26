@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 @Composable
-fun CustomNavigationBottom() {
+fun NavigationBottom() {
     var selectedIndex by remember { mutableIntStateOf(0) }
     NavigationBar {
         NavigationBarItem(
