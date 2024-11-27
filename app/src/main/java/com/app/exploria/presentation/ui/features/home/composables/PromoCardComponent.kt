@@ -22,10 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.app.exploria.R
+import com.app.exploria.presentation.ui.navigation.Screen
 
 @Composable
-fun PromoCardComponent(onClick: () -> Unit = {}) {
+fun PromoCardComponent(navController: NavController) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE1F5FE)),
@@ -33,7 +35,7 @@ fun PromoCardComponent(onClick: () -> Unit = {}) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .clickable { onClick() }
+            .clickable {navController.navigate(Screen.Plan.route)}
     ) {
         Row(
             modifier = Modifier

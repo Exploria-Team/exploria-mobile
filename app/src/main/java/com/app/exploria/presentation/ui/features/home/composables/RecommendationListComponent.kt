@@ -11,10 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.features.common.ItemList
 
 @Composable
-fun RecomendationListComponent(recomendations: List<Int>, modifier: Modifier = Modifier) {
+fun RecomendationListComponent(navController: NavController, recomendations: List<Int>, modifier: Modifier = Modifier) {
     Column {
         Text(
             text = "Rekomendasi untuk mu",
@@ -27,7 +28,7 @@ fun RecomendationListComponent(recomendations: List<Int>, modifier: Modifier = M
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(recomendations) { recomendation ->
-                ItemList(image = recomendation)
+                ItemList(navController, image = recomendation)
             }
         }
     }

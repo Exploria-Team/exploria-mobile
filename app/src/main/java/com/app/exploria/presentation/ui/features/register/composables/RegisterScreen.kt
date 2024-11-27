@@ -27,12 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.features.common.CustomButton
 import com.app.exploria.presentation.ui.features.common.CustomTextField
+import com.app.exploria.presentation.ui.navigation.Screen
 import com.example.compose.AppTheme
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(navController: NavController? = null) {
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
@@ -88,7 +90,10 @@ fun RegisterScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
 
-                    CustomButton(text = "Login")
+                    CustomButton(text = "Register", onClick = {navController?.navigate(Screen.Survey.route) {
+                        popUpTo(Screen.Register.route) { inclusive = true }
+                        launchSingleTop = true
+                    } })
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
