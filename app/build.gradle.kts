@@ -54,6 +54,8 @@ android {
 dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.datastore.preferences)
+
     //compose
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
