@@ -1,6 +1,7 @@
 package com.app.exploria.presentation.ui.features.favorite.composables
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,19 +15,49 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.R
 import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
 import com.app.exploria.presentation.ui.features.common.ItemList
-import com.example.compose.AppTheme
+import com.app.exploria.presentation.ui.features.common.NavigationBottom
+import com.app.exploria.presentation.ui.navigation.Screen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(favorites: List<Int>, modifier: Modifier = Modifier) {
+fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) {
+    BackHandler {
+        navController.navigate(Screen.Home.route) {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+        }
+    }
+
+    val favorites = listOf(
+        R.drawable.img,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2
+    )
+
     Scaffold(
         topBar = {
             CustomHeaderTitle(onClick = {}, title = "Favorite")
+        },
+        bottomBar = {
+            NavigationBottom(navController)
         }
     ) { innerPadding: PaddingValues ->
         Surface(
@@ -40,38 +71,14 @@ fun FavoriteScreen(favorites: List<Int>, modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(vertical = 8.dp),
-                modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             ) {
                 items(favorites) { recomendation ->
-                    ItemList(image = recomendation)
+                    ItemList(navController, image = recomendation)
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FavoriteScreenPreview() {
-    AppTheme {
-        FavoriteScreen(
-            favorites = listOf(
-                R.drawable.img,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2
-            )
-        )
     }
 }

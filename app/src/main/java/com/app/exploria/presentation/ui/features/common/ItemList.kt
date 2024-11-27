@@ -1,6 +1,7 @@
 package com.app.exploria.presentation.ui.features.common
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,10 +18,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun ItemList(image: Int, modifier: Modifier = Modifier) {
-    Box(modifier = modifier.size(180.dp).clip(RoundedCornerShape(16.dp))) {
+fun ItemList(navController: NavController, image: Int, modifier: Modifier = Modifier) {
+    Box(modifier = modifier
+        .size(180.dp)
+        .clickable {
+            val id = "123"
+            navController.navigate("detail/$id")
+        }
+        .clip(RoundedCornerShape(16.dp))) {
         Image(
             painter = painterResource(id = image),
             "itemList",

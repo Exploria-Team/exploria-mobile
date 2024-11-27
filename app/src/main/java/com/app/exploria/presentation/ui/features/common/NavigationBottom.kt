@@ -9,63 +9,49 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.navigation.NavController
+import com.app.exploria.presentation.ui.navigation.Screen
 
 @Composable
-fun NavigationBottom() {
-    var selectedIndex by remember { mutableIntStateOf(0) }
+fun NavigationBottom(navController: NavController) {
+    val items = listOf(
+        Screen.Home,
+        Screen.Plan,
+        Screen.Favorite
+    )
+
     NavigationBar {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    Icons.Filled.Home,
-                    contentDescription = "Home"
-                )
-            },
-            label = {
-                Text("Home")
-            },
-            selected = selectedIndex == 0,
-            onClick = {
-                selectedIndex = 0
-            }
-        )
-
-        // Plan Item
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    Icons.Outlined.Place,
-                    contentDescription = "Plan"
-                )
-            },
-            label = {
-                Text("Rencana")
-            },
-            selected = selectedIndex == 1,
-            onClick = {
-                selectedIndex = 1
-            }
-        )
-
-        // Favorite Item
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    Icons.Outlined.Favorite,
-                    contentDescription = "Favorite"
-                )
-            },
-            label = {
-                Text("Disukai")
-            },
-            selected = selectedIndex == 2,
-            onClick = {
-                selectedIndex = 2
-            }
-        )
+        items.forEach { screen ->
+            NavigationBarItem(
+                icon = {
+                    when (screen) {
+                        is Screen.Home -> Icon(Icons.Filled.Home, contentDescription = "Home")
+                        is Screen.Plan -> Icon(Icons.Outlined.Place, contentDescription = "Plan")
+                        is Screen.Favorite -> Icon(Icons.Outlined.Favorite, contentDescription = "Favorite")
+                        else -> {}
+                    }
+                },
+                label = {
+                    when (screen) {
+                        is Screen.Home -> Text("Home")
+                        is Screen.Plan -> Text("Rencana")
+                        is Screen.Favorite -> Text("Disukai")
+                        else -> {}
+                    }
+                },
+                selected = navController.currentDestination?.route == screen.route,
+                onClick = {
+                    navController.navigate(screen.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
+        }
     }
 }
+
+

@@ -32,11 +32,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.R
+import com.app.exploria.presentation.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderComponent() {
+fun HeaderComponent(navController: NavController) {
     val query = remember { mutableStateOf("") }
     val expanded = remember { mutableStateOf(false) }
 
@@ -94,7 +96,7 @@ fun HeaderComponent() {
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(40.dp)
+                .size(40.dp).clickable { navController.navigate(Screen.Profile.route) }
         )
     }
 }

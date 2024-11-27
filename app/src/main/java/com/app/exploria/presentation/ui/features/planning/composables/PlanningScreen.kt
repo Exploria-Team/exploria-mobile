@@ -2,6 +2,7 @@ package com.app.exploria.presentation.ui.features.planning.composables
 
 import SimpleDateRangePicker
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,18 +19,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.features.common.CustomButton
 import com.app.exploria.presentation.ui.features.common.NavigationBottom
 import com.app.exploria.presentation.ui.features.planning.common.AddDestinationButton
 import com.app.exploria.presentation.ui.features.planning.common.PlanCard
+import com.app.exploria.presentation.ui.navigation.Screen
 import com.example.compose.AppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FirstPlanningScreen() {
+fun PlanningScreen(navController: NavController) {
+
+    BackHandler {
+        navController.navigate(Screen.Home.route) {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+        }
+    }
     Scaffold(
         bottomBar = {
-            NavigationBottom()
+            NavigationBottom(navController)
         }
     ) { paddingValues ->
         Box(
@@ -75,18 +86,20 @@ fun FirstPlanningScreen() {
                     .align(Alignment.Center),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                CustomButton(text = "Selanjutnya", width = 378, height = 64)
+                CustomButton(text = "Selanjutnya", width = 378, height = 64, onClick = {
+                    navController.navigate(
+                        Screen.SecondPlan.route
+                    )
+                })
             }
         }
     }
 }
 
 @Composable
-fun SecondPlanningScreen() {
+fun SecondPlanningScreen(navController: NavController) {
     Scaffold(
-        bottomBar = {
-            NavigationBottom()
-        }
+
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -94,7 +107,6 @@ fun SecondPlanningScreen() {
                 .background(MaterialTheme.colorScheme.background)
                 .padding(paddingValues)
         ) {
-            // Konten atas
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +120,7 @@ fun SecondPlanningScreen() {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.padding(8.dp))
-                AddDestinationButton(onClick = {})
+                AddDestinationButton(onClick = {navController.navigate(Screen.SelectDestination.route)})
             }
 
             Box(
@@ -125,18 +137,20 @@ fun SecondPlanningScreen() {
                     .align(Alignment.Center),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                CustomButton(text = "Selanjutnya", width = 378, height = 64)
+                CustomButton(
+                    text = "Simpan",
+                    width = 378,
+                    height = 64,
+                    onClick = { navController.navigate(Screen.FinalPlan.route) })
             }
         }
     }
 }
 
 @Composable
-fun FinalPlanningScreen() {
+fun FinalPlanningScreen(navController: NavController) {
     Scaffold(
-        bottomBar = {
-            NavigationBottom()
-        }
+
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -161,7 +175,7 @@ fun FinalPlanningScreen() {
                     style = MaterialTheme.typography.titleMedium
                 )
                 PlanCard(planName = "Rencana 1")
-                AddDestinationButton(onClick = {})
+                AddDestinationButton(onClick = {navController.navigate(Screen.Plan.route)})
             }
 
             Box(
@@ -171,15 +185,6 @@ fun FinalPlanningScreen() {
                 contentAlignment = Alignment.Center
             ) {
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.Center),
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                CustomButton(text = "Selanjutnya", width = 378, height = 64)
-            }
         }
     }
 }
@@ -188,7 +193,6 @@ fun FinalPlanningScreen() {
 @Composable
 fun FirstPlanningScreenPreview() {
     AppTheme {
-        FinalPlanningScreen()
     }
 }
 

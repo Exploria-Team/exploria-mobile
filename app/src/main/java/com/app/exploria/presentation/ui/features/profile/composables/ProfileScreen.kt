@@ -18,27 +18,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.R
 import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
-import com.app.exploria.presentation.ui.features.common.NavigationBottom
 import com.example.compose.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(
-    onBackClick: () -> Unit,
-    onEditProfileClick: () -> Unit,
-    onFAQClick: () -> Unit,
-    onHelpClick: () -> Unit,
-    onLogoutClick: () -> Unit
+fun ProfileScreen(
+    navController: NavController? = null
 ) {
     Scaffold(
         topBar = {
             CustomHeaderTitle(onClick = {}, title = "Profile")
         },
-        bottomBar = {
-            NavigationBottom()
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -61,7 +54,11 @@ fun ProfilePage(
                         .clip(CircleShape)
                 )
 
-                Text(text = "Rizki Sepriadi", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(bottom = 32.dp))
+                Text(
+                    text = "Rizki Sepriadi",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(bottom = 32.dp)
+                )
             }
 
             SettingsListItem(title = "Ubah Profile")
@@ -80,12 +77,7 @@ fun ProfilePage(
 @Composable
 fun Preview() {
     AppTheme {
-        ProfilePage(
-            onBackClick = {},
-            onEditProfileClick = {},
-            onFAQClick = {},
-            onHelpClick = {},
-            onLogoutClick = {}
+        ProfileScreen(
         )
     }
 }

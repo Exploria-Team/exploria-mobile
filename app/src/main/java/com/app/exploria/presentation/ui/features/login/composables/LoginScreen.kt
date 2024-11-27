@@ -22,14 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.features.common.CustomButton
 import com.app.exploria.presentation.ui.features.common.CustomTextField
-import com.example.compose.AppTheme
+import com.app.exploria.presentation.ui.navigation.Screen
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
@@ -80,7 +80,12 @@ fun LoginScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
 
-                    CustomButton(text = "Login")
+                    CustomButton(
+                        text = "Login",
+                        onClick = { navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                            launchSingleTop = true
+                        } })
 
                     Text(
                         text = "Atau login menggunakan :",
@@ -97,6 +102,7 @@ fun LoginScreen() {
                         )
 
                         TextButton(onClick = {
+                            navController.navigate(Screen.Register.route)
                         }
                         ) {
                             Text(
@@ -111,13 +117,5 @@ fun LoginScreen() {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    AppTheme {
-        LoginScreen()
     }
 }
