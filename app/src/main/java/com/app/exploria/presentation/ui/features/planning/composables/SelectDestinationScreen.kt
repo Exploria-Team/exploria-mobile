@@ -14,17 +14,33 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.R
 import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
 import com.app.exploria.presentation.ui.features.common.ItemList
-import com.example.compose.AppTheme
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SelectDestinationScreen(favorites: List<Int>, modifier: Modifier = Modifier) {
+fun SelectDestinationScreen(navController: NavController, modifier: Modifier = Modifier) {
+    val favorites = listOf(
+        R.drawable.img,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2,
+        R.drawable.img2
+    )
+
     Scaffold(
         topBar = {
             CustomHeaderTitle(onClick = {}, title = "Daftar Destinasi")
@@ -46,35 +62,9 @@ fun SelectDestinationScreen(favorites: List<Int>, modifier: Modifier = Modifier)
                     .padding(horizontal = 16.dp)
             ) {
                 items(favorites) { recomendation ->
-                    ItemList(image = recomendation)
+                    ItemList(navController, image = recomendation)
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FavoriteScreenPreview() {
-    AppTheme {
-        SelectDestinationScreen(
-            favorites = listOf(
-                R.drawable.img,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2,
-                R.drawable.img2
-            )
-        )
     }
 }
