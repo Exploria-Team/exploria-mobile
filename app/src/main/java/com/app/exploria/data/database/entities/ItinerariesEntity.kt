@@ -13,9 +13,9 @@ data class ItinerariesEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "name")
     var name: String,
-    @ColumnInfo(name = "startdate")
+    @ColumnInfo(name = "start_date")
     var startdate: String,
-    @ColumnInfo(name = "finishdate")
+    @ColumnInfo(name = "finish_date")
     var finishdate: String,
     @ColumnInfo(name = "destinations")
     var destinations: List<DestinationItem>
