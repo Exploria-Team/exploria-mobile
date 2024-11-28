@@ -10,13 +10,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import com.app.exploria.R
 import com.example.compose.AppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(navController: NavController? = null) {
+fun DetailScreen(id : String? = "satu") {
+
     Scaffold(
         topBar = {
             Toolbar()
@@ -32,7 +32,8 @@ fun DetailScreen(navController: NavController? = null) {
                         R.drawable.img2,
                     )
                 )
-                BodyDetailComponent(navController)
+                BodyDetailComponent()
+
             }
         }
     }
@@ -42,6 +43,6 @@ fun DetailScreen(navController: NavController? = null) {
 @Composable
 fun DetailScreenPreview() {
     AppTheme {
-        DetailScreen()
+        DetailScreen("satu")
     }
 }

@@ -1,5 +1,7 @@
 package com.app.exploria.presentation.ui.features.survey.composables
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,12 +29,22 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.app.exploria.presentation.ui.navigation.Screen
 import com.example.compose.AppTheme
 
 @Composable
-fun CategorySelectionScreen() {
+fun SurveyScreen(navController: NavController? = null) {
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+    BackHandler {
+        activity?.finish()
+    }
+
     val categories = listOf(
         "Bahari", "Cagar Alam", "Suaka Margasatwa", "Pantai", "Pulau", "Hutan Lindung",
         "Budaya", "Museum Sejarah", "Museum", "Situs Sejarah", "Tempat Ibadah", "Pasar",
@@ -97,7 +109,7 @@ fun CategorySelectionScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /* Handle confirmation */ },
+                onClick = { navController?.navigate(Screen.Home.route) },
                 enabled = selectedCategories.size == 5,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
                 shape = CircleShape
@@ -145,6 +157,6 @@ fun CategoryItem(category: String, isSelected: Boolean, onClick: () -> Unit) {
 @Composable
 fun CategorySelectionScreenPreview() {
     AppTheme {
-        CategorySelectionScreen()
+        SurveyScreen()
     }
 }
