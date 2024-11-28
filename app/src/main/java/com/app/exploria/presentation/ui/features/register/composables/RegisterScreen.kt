@@ -33,6 +33,8 @@ import com.app.exploria.presentation.ui.features.common.CustomTextField
 import com.app.exploria.presentation.ui.navigation.Screen
 import com.example.compose.AppTheme
 
+@Composable
+fun RegisterScreen(navController: NavController? = null) {
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 

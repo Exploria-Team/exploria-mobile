@@ -13,6 +13,12 @@ import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.navigation.Screen
 
 @Composable
+fun NavigationBottom(navController: NavController) {
+    val items = listOf(
+        Screen.Home,
+        Screen.Plan,
+        Screen.Favorite
+    )
     NavigationBar {
         items.forEach { screen ->
             NavigationBarItem(
