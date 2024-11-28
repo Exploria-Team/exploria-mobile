@@ -16,6 +16,7 @@ import com.example.compose.AppTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailScreen(id : String? = "satu") {
+
     Scaffold(
         topBar = {
             Toolbar()
@@ -32,6 +33,7 @@ fun DetailScreen(id : String? = "satu") {
                     )
                 )
                 BodyDetailComponent()
+
             }
         }
     }

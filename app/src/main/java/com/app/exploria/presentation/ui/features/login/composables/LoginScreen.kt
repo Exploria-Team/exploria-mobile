@@ -79,13 +79,13 @@ fun LoginScreen(navController: NavController) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-
                     CustomButton(
                         text = "Login",
                         onClick = { navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                             launchSingleTop = true
                         } })
+
 
                     Text(
                         text = "Atau login menggunakan :",

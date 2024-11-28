@@ -111,6 +111,7 @@ fun HomeScreen(navController: NavController) {
                         item {
                             RecomendationListComponent(
                                 navController,
+
                                 recomendations = listOf(
                                     R.drawable.img,
                                     R.drawable.img2,
@@ -136,6 +137,7 @@ fun HomeScreen(navController: NavController) {
                             ) {
                                 DestinationsListComponent(
                                     navController,
+
                                     recomendations = listOf(
                                         R.drawable.img,
                                         R.drawable.img2,

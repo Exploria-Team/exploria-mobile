@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun BodyDetailComponent() {
+
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("Deskripsi", "Ulasan", "Peta")
 

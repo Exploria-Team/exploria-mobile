@@ -29,6 +29,7 @@ fun SettingsListItem(title: String, onClick: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onClick() }
+
                 .padding(horizontal = 16.dp, vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
