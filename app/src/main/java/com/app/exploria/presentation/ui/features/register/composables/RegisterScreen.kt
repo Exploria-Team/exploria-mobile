@@ -33,8 +33,6 @@ import com.app.exploria.presentation.ui.features.common.CustomTextField
 import com.app.exploria.presentation.ui.navigation.Screen
 import com.example.compose.AppTheme
 
-@Composable
-fun RegisterScreen(navController: NavController? = null) {
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
 
@@ -89,7 +87,6 @@ fun RegisterScreen(navController: NavController? = null) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-
                     CustomButton(text = "Register", onClick = {navController?.navigate(Screen.Survey.route) {
                         popUpTo(Screen.Register.route) { inclusive = true }
                         launchSingleTop = true

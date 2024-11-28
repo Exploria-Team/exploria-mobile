@@ -34,6 +34,7 @@ fun DestinationsListComponent(navController : NavController,recomendations: List
         ) {
             items(recomendations) { recomendation ->
                 ItemList(navController, image = recomendation)
+
             }
         }
     }

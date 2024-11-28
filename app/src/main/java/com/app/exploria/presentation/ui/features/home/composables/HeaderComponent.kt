@@ -97,6 +97,7 @@ fun HeaderComponent(navController: NavController) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp).clickable { navController.navigate(Screen.Profile.route) }
+
         )
     }
 }

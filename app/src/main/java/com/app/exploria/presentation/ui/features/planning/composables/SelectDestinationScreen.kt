@@ -20,7 +20,6 @@ import com.app.exploria.R
 import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
 import com.app.exploria.presentation.ui.features.common.ItemList
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SelectDestinationScreen(navController: NavController, modifier: Modifier = Modifier) {

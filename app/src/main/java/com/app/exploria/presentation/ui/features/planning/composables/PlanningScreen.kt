@@ -99,7 +99,6 @@ fun PlanningScreen(navController: NavController) {
 @Composable
 fun SecondPlanningScreen(navController: NavController) {
     Scaffold(
-
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -150,7 +149,6 @@ fun SecondPlanningScreen(navController: NavController) {
 @Composable
 fun FinalPlanningScreen(navController: NavController) {
     Scaffold(
-
     ) { paddingValues ->
         Box(
             modifier = Modifier
