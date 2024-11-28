@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.dagger)
     id("kotlin-parcelize")
 }
 
