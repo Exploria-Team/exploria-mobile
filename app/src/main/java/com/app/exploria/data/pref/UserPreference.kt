@@ -1,20 +1,20 @@
 package com.app.exploria.data.pref
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.app.exploria.data.models.userData.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
-
-class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
+@Singleton
+class UserPreference @Inject constructor(
+    private val dataStore: DataStore<Preferences>  // Dapatkan dataStore lewat DI
+) {
 
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
@@ -35,35 +35,12 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     }
 
     suspend fun logout() {
-        dataStore.edit { preferences ->
-            preferences.clear()
-        }
-    }
-
-    fun getUser(): Flow<UserModel> {
-        return dataStore.data.map { preferences ->
-            UserModel(
-                email = preferences[EMAIL_KEY] ?: "",
-                token = preferences[TOKEN] ?: "",
-                isLogin = preferences[IS_LOGIN_KEY] ?: false
-            )
-        }
+        dataStore.edit { preferences -> preferences.clear() }
     }
 
     companion object {
-        @Volatile
-        private var INSTANCE: UserPreference? = null
-
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN = stringPreferencesKey("token")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
-
-        fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
-            return INSTANCE ?: synchronized(this) {
-                val instance = UserPreference(dataStore)
-                INSTANCE = instance
-                instance
-            }
-        }
     }
 }

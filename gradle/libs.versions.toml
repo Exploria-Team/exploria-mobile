@@ -107,6 +107,6 @@ androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+dagger = { id = "com.google.dagger.hilt.android", version = "2.50" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
