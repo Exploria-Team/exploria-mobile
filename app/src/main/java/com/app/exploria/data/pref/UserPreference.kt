@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class UserPreference @Inject constructor(
-    private val dataStore: DataStore<Preferences>  // Dapatkan dataStore lewat DI
+    private val dataStore: DataStore<Preferences>
 ) {
 
     suspend fun saveSession(user: UserModel) {
