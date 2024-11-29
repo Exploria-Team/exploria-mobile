@@ -4,6 +4,8 @@ import com.app.exploria.data.remote.request.FavoriteRequest
 import com.app.exploria.data.remote.request.PlanDestinationRequest
 import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.ReviewRequest
+import com.app.exploria.data.remote.response.DestinationListResponse
+import com.app.exploria.data.remote.response.DestinationResponse
 import com.app.exploria.data.remote.response.FavoriteResponse
 import com.app.exploria.data.remote.response.TourGuide
 import com.app.exploria.data.remote.response.TourGuideResponse
@@ -57,10 +59,10 @@ interface ApiService {
 
     // Destination
     @GET("destination/{id}")
-    suspend fun getDestination(@Path("id") id: Int)
+    suspend fun getDestination(@Path("id") id: Int) : DestinationResponse
 
     @GET("destination/search")
-    suspend fun searchDestination(@Query("text_search") textSearch : String)
+    suspend fun searchDestination(@Query("search") search : String) : DestinationListResponse
 
     // Review
     @GET("review")
