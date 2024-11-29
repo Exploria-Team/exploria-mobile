@@ -24,14 +24,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.features.common.CustomButton
 import com.app.exploria.presentation.ui.features.common.CustomTextField
 import com.app.exploria.presentation.ui.navigation.Screen
+import com.app.exploria.presentation.viewModel.MainViewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, mainViewModel: MainViewModel) {
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
+
+
+    val userModel = UserModel(
+        email = emailState.value.text,
+        token = "dummy_token",
+        isLogin = true)
 
     Box(
         modifier = Modifier
@@ -81,7 +89,10 @@ fun LoginScreen(navController: NavController) {
                 ) {
                     CustomButton(
                         text = "Login",
-                        onClick = { navController.navigate(Screen.Home.route) {
+                        onClick = {
+                            mainViewModel.saveSession(userModel)
+
+                            navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                             launchSingleTop = true
                         } })

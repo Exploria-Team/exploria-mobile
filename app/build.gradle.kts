@@ -56,7 +56,6 @@ android {
 dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
-    implementation(libs.androidx.datastore.preferences)
 
     //compose
     val composeBom = platform(libs.androidx.compose.bom)
@@ -72,6 +71,7 @@ dependencies {
     implementation(libs.google.android.material)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.navigation.compose)
 
     //test
     androidTestImplementation(libs.androidx.ui.test.junit4)
@@ -117,19 +117,10 @@ dependencies {
     implementation (libs.androidx.ui)
     implementation (libs.androidx.ui.test)
 
-
-    //Koin
-//    implementation(libs.koin.android)
-//    implementation(libs.koin.core)
-//    testImplementation(libs.koin.test)
-//    implementation(libs.koin.android)
-//    implementation(libs.koin.android.compat)
-//    testImplementation(libs.koin.test.junit4)
-
     //dagger
     implementation(libs.dagger.hilt)
+    implementation(libs.hilt.compose.navigation)
     kapt(libs.dagger.kapt)
-
 
     //Retrofit
     implementation(libs.retrofit)
@@ -142,12 +133,11 @@ dependencies {
     //Glide
     implementation(libs.landscapist.glide)
 
-    implementation(libs.androidx.navigation.compose)
-
     //room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.datastore.preferences)
 }
