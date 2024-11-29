@@ -4,6 +4,9 @@ import com.app.exploria.data.remote.request.FavoriteRequest
 import com.app.exploria.data.remote.request.PlanDestinationRequest
 import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.ReviewRequest
+import com.app.exploria.data.remote.response.FavoriteResponse
+import com.app.exploria.data.remote.response.TourGuide
+import com.app.exploria.data.remote.response.TourGuideResponse
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -42,7 +45,7 @@ interface ApiService {
     )
 
     @GET("user/favorite")
-    suspend fun getAllUserFavorite()
+    suspend fun getAllUserFavorite(): FavoriteResponse
 
     @POST("user/preference")
     suspend fun preference(
@@ -70,13 +73,13 @@ interface ApiService {
 
     // Tour Guide
     @GET("tour-guides")
-    suspend fun searchTourGuide(@Query("search") search : String)
+    suspend fun searchTourGuide(@Query("search") search: String): TourGuideResponse<List<TourGuide>>
 
     @GET("tour-guides/{id}")
-    suspend fun getTourGuideById(@Path("id") id : String)
+    suspend fun getTourGuideById(@Path("id") id: String): TourGuideResponse<TourGuide>
 
     @GET("tour-guides")
-    suspend fun getAllTourGuides()
+    suspend fun getAllTourGuides(): TourGuideResponse<List<TourGuide>>
 
     // Travel Plan
     @GET("travel-plan")
