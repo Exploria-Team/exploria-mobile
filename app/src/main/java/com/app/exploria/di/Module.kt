@@ -8,14 +8,16 @@ import androidx.room.Room
 import com.app.exploria.data.database.ItinerariesDatabase
 import com.app.exploria.data.database.dao.ItinerariesDao
 import com.app.exploria.data.pref.UserPreference
+import com.app.exploria.data.remote.api.ApiConfig
 import com.app.exploria.data.remote.api.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import javax.inject.Named
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
@@ -53,12 +55,23 @@ object Module {
 
     @Provides
     @Singleton
-    fun provideApiService(): ApiService {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        return retrofit.create(ApiService::class.java)
+    fun provideApiService(apiConfig: ApiConfig): ApiService {
+        return apiConfig.provideApiService()
     }
+
+    @Provides
+    @Singleton
+    @Named("AuthToken")
+    fun provideAuthToken(userPreference: UserPreference): String {
+        val token = runBlocking { userPreference.getSession().firstOrNull()?.token }
+        return token ?: throw IllegalStateException("Auth token is not available")
+    }
+
+    @Provides
+    @Singleton
+    @Named("ApiServiceWithToken")
+    fun provideApiServiceWithToken(apiConfig: ApiConfig, @Named("AuthToken") token: String): ApiService {
+        return apiConfig.provideApiServiceWithToken(token)
+    }
+
 }
