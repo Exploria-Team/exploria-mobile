@@ -25,7 +25,7 @@ import com.app.exploria.presentation.viewModel.MainViewModel
 @Composable
 fun AppNavigation(mainViewModel: MainViewModel) {
     val navController = rememberNavController()
-    val userState by mainViewModel.user.collectAsState()
+    val userState by mainViewModel.userModel.collectAsState()
 
     LaunchedEffect(Unit) {
         mainViewModel.loadUser()
@@ -52,7 +52,7 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         composable(Screen.Plan.route) { PlanningScreen(navController) }
         composable(Screen.Favorite.route) { FavoriteScreen(navController) }
         composable(Screen.Login.route) { LoginScreen(navController, mainViewModel) }
-        composable(Screen.Register.route) { RegisterScreen(navController) }
+        composable(Screen.Register.route) { RegisterScreen(navController, mainViewModel) }
         composable(Screen.Survey.route) { SurveyScreen(navController) }
         composable(Screen.Profile.route) { ProfileScreen(navController, mainViewModel) }
         composable(Screen.SecondPlan.route) { SecondPlanningScreen(navController) }
