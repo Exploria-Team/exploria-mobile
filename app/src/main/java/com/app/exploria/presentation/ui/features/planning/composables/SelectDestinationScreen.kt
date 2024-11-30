@@ -2,6 +2,7 @@ package com.app.exploria.presentation.ui.features.planning.composables
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,7 +44,14 @@ fun SelectDestinationScreen(navController: NavController, modifier: Modifier = M
 
     Scaffold(
         topBar = {
-            CustomHeaderTitle(onClick = {}, title = "Daftar Destinasi")
+            Box(
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                CustomHeaderTitle(
+                    onClick = { navController.popBackStack() },
+                    title = "Daftar Destinasi"
+                )
+            }
         }
     ) { innerPadding: PaddingValues ->
         Surface(

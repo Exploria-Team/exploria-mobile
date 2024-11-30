@@ -2,6 +2,7 @@ package com.app.exploria.presentation.ui.features.profile.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,14 @@ fun ProfileScreen(
 ) {
     Scaffold(
         topBar = {
-            CustomHeaderTitle(onClick = {}, title = "Profile")
+            Box(
+                modifier = Modifier.padding(vertical = 16.dp)
+            ) {
+                CustomHeaderTitle(
+                    onClick = { navController.popBackStack() },
+                    title = "Profile"
+                )
+            }
         },
     ) { paddingValues ->
         Column(

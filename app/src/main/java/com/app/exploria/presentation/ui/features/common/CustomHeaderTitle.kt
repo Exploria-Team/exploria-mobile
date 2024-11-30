@@ -1,12 +1,7 @@
 package com.app.exploria.presentation.ui.features.common
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.MaterialTheme
@@ -22,13 +17,15 @@ fun CustomHeaderTitle(onClick: () -> Unit, title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 8.dp),
-        contentAlignment = Alignment.Center
+            .height(65.dp) // Tinggi standar topBar
+            .padding(horizontal = 16.dp), // Padding kiri-kanan
+        contentAlignment = Alignment.Center // Penyelarasan konten ke tengah
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Tombol Back
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -39,16 +36,14 @@ fun CustomHeaderTitle(onClick: () -> Unit, title: String) {
                     icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
         }
+
+        // Judul berada tepat di tengah
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }
