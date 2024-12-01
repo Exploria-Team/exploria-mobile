@@ -20,5 +20,5 @@ interface ItinerariesDao {
     fun getAllItineraries(): Flow<List<ItinerariesEntity>>
 
     @Query("SELECT * from itineraries_database WHERE id= :id")
-    fun getItineraryById(id: Int?): Flow<ItinerariesEntity>
+    fun getItineraryById(id: Int): Flow<ItinerariesEntity>
 }
