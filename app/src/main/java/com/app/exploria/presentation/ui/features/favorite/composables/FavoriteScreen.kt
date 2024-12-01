@@ -3,6 +3,7 @@ package com.app.exploria.presentation.ui.features.favorite.composables
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,7 +55,14 @@ fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) 
 
     Scaffold(
         topBar = {
-            CustomHeaderTitle(onClick = {}, title = "Favorite")
+            Box(
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                CustomHeaderTitle(
+                    onClick = { navController.navigate(Screen.Home.route) },
+                    title = "Favorite"
+                )
+            }
         },
         bottomBar = {
             NavigationBottom(navController)
@@ -75,8 +83,8 @@ fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) 
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                items(favorites) { recomendation ->
-                    ItemList(navController, image = recomendation)
+                items(favorites) { recommendation ->
+                    ItemList(navController, image = recommendation)
                 }
             }
         }

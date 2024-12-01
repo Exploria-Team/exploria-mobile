@@ -19,6 +19,7 @@ import com.app.exploria.presentation.ui.features.planning.composables.SecondPlan
 import com.app.exploria.presentation.ui.features.planning.composables.SelectDestinationScreen
 import com.app.exploria.presentation.ui.features.profile.composables.ProfileScreen
 import com.app.exploria.presentation.ui.features.register.composables.RegisterScreen
+import com.app.exploria.presentation.ui.features.search.composables.SearchScreen
 import com.app.exploria.presentation.ui.features.survey.composables.SurveyScreen
 import com.app.exploria.presentation.viewModel.MainViewModel
 
@@ -34,11 +35,11 @@ fun AppNavigation(mainViewModel: MainViewModel) {
     LaunchedEffect(userState) {
         if (userState?.isLogin == true) {
             navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Login.route) { inclusive = true}
+                popUpTo(Screen.Login.route) { inclusive = true }
             }
         } else {
             navController.navigate(Screen.Login.route) {
-                popUpTo(Screen.Login.route) { inclusive = true}
+                popUpTo(Screen.Login.route) { inclusive = true }
             }
         }
     }
@@ -63,7 +64,8 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { navBackStackEntry ->
             val detailId = navBackStackEntry.arguments?.getString("id")
-            DetailScreen(detailId)
+            DetailScreen(detailId, navController)
         }
+        composable(Screen.Search.route) { SearchScreen(navController) }
     }
 }

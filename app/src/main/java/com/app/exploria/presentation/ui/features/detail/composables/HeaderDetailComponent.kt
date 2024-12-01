@@ -11,10 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.features.common.CustomButtonNavigation
 
 @Composable
-fun Toolbar() {
+fun Toolbar(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -22,7 +23,7 @@ fun Toolbar() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = { /* TODO: Handle back action */ }) {
+        IconButton(onClick = { navController.popBackStack() }) {
             CustomButtonNavigation(
                 icon = Icons.AutoMirrored.Filled.ArrowBack,
             )

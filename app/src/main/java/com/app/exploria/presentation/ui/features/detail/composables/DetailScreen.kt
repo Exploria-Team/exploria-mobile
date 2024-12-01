@@ -2,24 +2,30 @@ package com.app.exploria.presentation.ui.features.detail.composables
 
 import Toolbar
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.app.exploria.R
-import com.example.compose.AppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(id : String? = "satu") {
+fun DetailScreen(id : String? = "satu", navController: NavController) {
 
     Scaffold(
         topBar = {
-            Toolbar()
+            Box(
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Toolbar(navController)
+            }
         }
     ) { Surface(
             color = MaterialTheme.colorScheme.surface
@@ -36,13 +42,5 @@ fun DetailScreen(id : String? = "satu") {
 
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DetailScreenPreview() {
-    AppTheme {
-        DetailScreen("satu")
     }
 }
