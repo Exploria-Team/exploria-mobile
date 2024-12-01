@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,123 +44,155 @@ fun LoginScreen(navController: NavController, mainViewModel: MainViewModel) {
     val userModel by mainViewModel.userModel.collectAsState()
     val validationError = remember { mutableStateOf<String?>(null) }
 
+    userModel?.let {
+        if (it.isLogin) {
+            navigateToHome(navController)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(0.9f),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background)
+        LoginCard(
+            emailState = emailState,
+            passwordState = passwordState,
+            isLoading = isLoading,
+            validationError = validationError,
+            errorMessage = errorMessage,
+            onLoginClick = {
+                handleLoginClick(emailState, passwordState, validationError, mainViewModel)
+            },
+            onGoogleLoginClick = { /* Handle Google Login */ },
+            onRegisterClick = { navController.navigate(Screen.Register.route) }
+        )
+    }
+}
+
+private fun navigateToHome(navController: NavController) {
+    navController.navigate(Screen.Home.route) {
+        popUpTo(Screen.Login.route) { inclusive = true }
+        launchSingleTop = true
+    }
+}
+
+private fun handleLoginClick(
+    emailState: MutableState<TextFieldValue>,
+    passwordState: MutableState<TextFieldValue>,
+    validationError: MutableState<String?>,
+    mainViewModel: MainViewModel
+) {
+    validationError.value = null
+    if (emailState.value.text.isBlank() || passwordState.value.text.isBlank()) {
+        validationError.value = "Email dan Password wajib diisi."
+    } else {
+        mainViewModel.login(emailState.value.text, passwordState.value.text)
+    }
+}
+
+@Composable
+fun LoginCard(
+    emailState: MutableState<TextFieldValue>,
+    passwordState: MutableState<TextFieldValue>,
+    isLoading: Boolean,
+    validationError: MutableState<String?>,
+    errorMessage: String?,
+    onLoginClick: () -> Unit,
+    onGoogleLoginClick: () -> Unit,
+    onRegisterClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(0.9f),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            Text(text = "Login", style = MaterialTheme.typography.headlineMedium)
+
+            LoginFields(emailState, passwordState)
+
+            validationError.value?.let {
+                ErrorMessage(message = it)
+            }
+
+            errorMessage?.let {
+                ErrorMessage(message = it)
+            }
+
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.size(50.dp), strokeWidth = 4.dp)
+            } else {
+                CustomButton(text = "Login", onClick = onLoginClick)
+            }
+
+            SocialLoginSection(onGoogleLoginClick)
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Login",
-                    style = MaterialTheme.typography.headlineMedium
+                    text = "Belum punya akun?",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
                 )
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    CustomTextField(
-                        value = emailState.value,
-                        onValueChange = { emailState.value = it },
-                        label = "Email",
-                        icon = Icons.Default.Email
-                    )
-
-                    CustomTextField(
-                        value = passwordState.value,
-                        onValueChange = { passwordState.value = it },
-                        label = "Password",
-                        icon = Icons.Default.Lock,
-                        isPassword = true
-                    )
-                }
-
-                if (!validationError.value.isNullOrEmpty()) {
+                TextButton(onClick = onRegisterClick) {
                     Text(
-                        validationError.value ?: "",
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(top = 8.dp)
+                        "Register",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
                     )
-                }
-
-                if (errorMessage != null) {
-                    Text(
-                        errorMessage ?: "Unknown error",
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(50.dp),
-                            strokeWidth = 4.dp
-                        )
-                    } else {
-                        CustomButton(
-                            text = "Login",
-                            onClick = {
-                                validationError.value = null
-                                if (emailState.value.text.isBlank() || passwordState.value.text.isBlank()) {
-                                    validationError.value = "Email dan Password wajib diisi."
-                                } else {
-                                    mainViewModel.login(
-                                        emailState.value.text,
-                                        passwordState.value.text
-                                    )
-                                }
-                            }
-                        )
-                    }
-
-                    if (userModel?.isLogin == true) {
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Login.route) { inclusive = true }
-                            launchSingleTop = true
-                        }
-                    }
-
-                    Text(
-                        text = "Atau login menggunakan :",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    CustomButton(text = "Google")
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "Belum punya akun?",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.Bold,
-                        )
-
-                        TextButton(onClick = {
-                            navController.navigate(Screen.Register.route)
-                        }) {
-                            mainViewModel.clearErrorMessage()
-                            Text(
-                                "Register",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-                    }
                 }
             }
         }
     }
 }
+
+@Composable
+fun LoginFields(
+    emailState: MutableState<TextFieldValue>,
+    passwordState: MutableState<TextFieldValue>
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        CustomTextField(
+            value = emailState.value,
+            onValueChange = { emailState.value = it },
+            label = "Email",
+            icon = Icons.Default.Email
+        )
+
+        CustomTextField(
+            value = passwordState.value,
+            onValueChange = { passwordState.value = it },
+            label = "Password",
+            icon = Icons.Default.Lock,
+            isPassword = true
+        )
+    }
+}
+
+@Composable
+fun ErrorMessage(message: String) {
+    Text(
+        text = message,
+        color = MaterialTheme.colorScheme.error,
+        modifier = Modifier.padding(top = 8.dp)
+    )
+}
+
+@Composable
+fun SocialLoginSection(onGoogleLoginClick: () -> Unit) {
+    Text(
+        text = "Atau login menggunakan :",
+        style = MaterialTheme.typography.bodyLarge
+    )
+    CustomButton(text = "Google", onClick = onGoogleLoginClick)
+}
+

@@ -16,6 +16,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import javax.inject.Named
 import javax.inject.Singleton
@@ -28,7 +29,7 @@ object Module {
 
     @Provides
     @Singleton
-    fun provideDatabase(context: Context): ItinerariesDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): ItinerariesDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             ItinerariesDatabase::class.java,
@@ -70,8 +71,12 @@ object Module {
     @Provides
     @Singleton
     @Named("ApiServiceWithToken")
-    fun provideApiServiceWithToken(apiConfig: ApiConfig, @Named("AuthToken") token: String): ApiService {
+    fun provideApiServiceWithToken(apiConfig: ApiConfig, userPreference: UserPreference): ApiService {
+        val token = runBlocking {
+            userPreference.getSession().map { it.token }.firstOrNull()
+        }
+        if (token.isNullOrEmpty()) throw IllegalStateException("Token is not available")
+
         return apiConfig.provideApiServiceWithToken(token)
     }
-
 }

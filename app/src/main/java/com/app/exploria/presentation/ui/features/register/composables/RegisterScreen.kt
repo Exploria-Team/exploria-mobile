@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +44,11 @@ fun RegisterScreen(navController: NavController, mainViewModel: MainViewModel) {
     val passwordState = remember { mutableStateOf(TextFieldValue()) }
     val isLoading by mainViewModel.isLoading.collectAsState()
     val errorMessage by mainViewModel.errorMessage.collectAsState()
-    val validationError = remember { mutableStateOf<String?>(null) }
+    val isRegistered by mainViewModel.isRegistered.collectAsState()
+
+    if (isRegistered) {
+        handleSuccessfulRegistration(navController, mainViewModel)
+    }
 
     Box(
         modifier = Modifier
@@ -51,107 +56,140 @@ fun RegisterScreen(navController: NavController, mainViewModel: MainViewModel) {
             .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(0.9f),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background)
+        RegistrationCard(
+            usernameState = usernameState,
+            emailState = emailState,
+            passwordState = passwordState,
+            isLoading = isLoading,
+            errorMessage = errorMessage,
+            onRegisterClick = { handleRegisterClick(usernameState, emailState, passwordState, mainViewModel) },
+            onLoginClick = { navController.navigate(Screen.Login.route) }
+        )
+    }
+}
+
+private fun handleSuccessfulRegistration(navController: NavController, mainViewModel: MainViewModel) {
+    navController.navigate(Screen.Login.route) {
+        popUpTo(Screen.Register.route) { inclusive = true }
+    }
+    mainViewModel.resetRegistrationState()
+}
+
+private fun handleRegisterClick(
+    usernameState: MutableState<TextFieldValue>,
+    emailState: MutableState<TextFieldValue>,
+    passwordState: MutableState<TextFieldValue>,
+    mainViewModel: MainViewModel
+) {
+    if (usernameState.value.text.isBlank() ||
+        emailState.value.text.isBlank() ||
+        passwordState.value.text.isBlank()
+    ) {
+        mainViewModel.setErrorMessage("Semua kolom wajib diisi.")
+    } else {
+        mainViewModel.register(
+            name = usernameState.value.text,
+            email = emailState.value.text,
+            password = passwordState.value.text
+        )
+    }
+}
+
+@Composable
+fun RegistrationCard(
+    usernameState: MutableState<TextFieldValue>,
+    emailState: MutableState<TextFieldValue>,
+    passwordState: MutableState<TextFieldValue>,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(0.9f),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.background)
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
+            Text(text = "Register", style = MaterialTheme.typography.headlineMedium)
+
+            InputFields(usernameState, emailState, passwordState)
+
+            errorMessage?.let {
                 Text(
-                    text = "Register",
-                    style = MaterialTheme.typography.headlineMedium
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
-
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    CustomTextField(
-                        value = usernameState.value,
-                        onValueChange = { usernameState.value = it },
-                        label = "Username",
-                        icon = Icons.Default.AccountCircle
-                    )
-
-                    CustomTextField(
-                        value = emailState.value,
-                        onValueChange = { emailState.value = it },
-                        label = "Email",
-                        icon = Icons.Default.Email
-                    )
-
-                    CustomTextField(
-                        value = passwordState.value,
-                        onValueChange = { passwordState.value = it },
-                        label = "Password",
-                        icon = Icons.Default.Lock,
-                        isPassword = true
-                    )
-                }
-
-                if (!validationError.value.isNullOrEmpty()) {
-                    Text(
-                        text = validationError.value ?: "",
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-
-                if (errorMessage != null) {
-                    Text(
-                        text = errorMessage ?: "",
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(modifier = Modifier.size(50.dp), strokeWidth = 4.dp)
-                    } else {
-                        CustomButton(
-                            text = "Register",
-                            onClick = {
-                                validationError.value = null
-                                if (usernameState.value.text.isBlank() ||
-                                    emailState.value.text.isBlank() ||
-                                    passwordState.value.text.isBlank()
-                                ) {
-                                    validationError.value = "Semua kolom wajib diisi."
-                                } else {
-                                    mainViewModel.register(
-                                        name = usernameState.value.text,
-                                        email = emailState.value.text,
-                                        password = passwordState.value.text
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = "Sudah punya akun?",
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold,
-                    )
-
-                    TextButton(onClick = { navController.navigate(Screen.Login.route) }) {
-                        Text(
-                            "Login",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-                }
             }
+
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.size(50.dp), strokeWidth = 4.dp)
+            } else {
+                CustomButton(
+                    text = "Register",
+                    onClick = onRegisterClick
+                )
+            }
+
+            LoginRow(onLoginClick)
+        }
+    }
+}
+
+@Composable
+fun InputFields(
+    usernameState: MutableState<TextFieldValue>,
+    emailState: MutableState<TextFieldValue>,
+    passwordState: MutableState<TextFieldValue>
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(32.dp)
+    ) {
+        CustomTextField(
+            value = usernameState.value,
+            onValueChange = { usernameState.value = it },
+            label = "Username",
+            icon = Icons.Default.AccountCircle
+        )
+
+        CustomTextField(
+            value = emailState.value,
+            onValueChange = { emailState.value = it },
+            label = "Email",
+            icon = Icons.Default.Email
+        )
+
+        CustomTextField(
+            value = passwordState.value,
+            onValueChange = { passwordState.value = it },
+            label = "Password",
+            icon = Icons.Default.Lock,
+            isPassword = true
+        )
+    }
+}
+
+@Composable
+fun LoginRow(onLoginClick: () -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "Sudah punya akun?",
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+        )
+
+        TextButton(onClick = onLoginClick) {
+            Text(
+                "Login",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+            )
         }
     }
 }

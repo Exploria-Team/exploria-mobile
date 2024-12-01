@@ -24,9 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.exploria.data.remote.response.DestinationResponse
 
 @Composable
-fun BodyDetailComponent() {
+fun BodyDetailComponent(destinationData: DestinationResponse) {
 
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("Deskripsi", "Ulasan", "Peta")
@@ -36,22 +37,23 @@ fun BodyDetailComponent() {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(MaterialTheme.colorScheme.surface),
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
+            // Judul Destinasi
             Text(
-                text = "Pantai Kuta - Bali",
+                text = destinationData.name ?: "Nama tidak tersedia",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
         }
 
         item {
+            // Tab Navigasi
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-
                 tabs.forEachIndexed { index, title ->
                     Text(
                         text = title,
@@ -66,15 +68,17 @@ fun BodyDetailComponent() {
         }
     }
 
+    // Konten Berdasarkan Tab
     when (selectedTab) {
-        0 -> DetailFragment()
+        0 -> DetailFragment(description = destinationData.description)
         1 -> UlasanFragment()
         2 -> PetaFragment()
     }
 }
 
+
 @Composable
-fun DetailFragment() {
+fun DetailFragment(description: String?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +86,7 @@ fun DetailFragment() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
-            text = "Pantai Kuta terletak di Kecamatan Kuta, Kabupaten Badung, Bali, sekitar 10 km dari Kota Denpasar dan hanya 15 menit berkendara dari Bandara Internasional Ngurah Rai. Pantai ini memiliki garis pantai sepanjang sekitar 2,5 kilometer dengan pasir putih lembut dan ombak yang ideal untuk berselancar. Pantai Kuta juga dikenal dengan pemandangan matahari terbenam yang menakjubkan, menjadikannya tempat favorit bagi wisatawan untuk menikmati senja",
+            text = description ?: "Deskripsi tidak tersedia",
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
@@ -92,6 +96,7 @@ fun DetailFragment() {
         )
     }
 }
+
 
 @Composable
 fun UlasanFragment() {

@@ -15,19 +15,20 @@ abstract class ItinerariesDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var INSTANCE : ItinerariesDatabase? = null
+        private var INSTANCE: ItinerariesDatabase? = null
 
         @JvmStatic
         fun getDatabase(context: Context): ItinerariesDatabase {
-            if (INSTANCE == null) {
-                synchronized(ItinerariesDatabase::class.java) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        ItinerariesDatabase::class.java, "itineraries_database"
-                    ).build()
-                }
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    ItinerariesDatabase::class.java,
+                    "itineraries_database"
+                ).fallbackToDestructiveMigration()
+                    .build()
+                    .also { INSTANCE = it }
             }
-            return INSTANCE as ItinerariesDatabase
         }
     }
 }
+
