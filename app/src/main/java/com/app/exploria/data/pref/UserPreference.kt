@@ -20,7 +20,7 @@ class UserPreference @Inject constructor(
         dataStore.edit { preferences ->
             preferences[EMAIL_KEY] = user.email
             preferences[TOKEN] = user.token
-            preferences[IS_LOGIN_KEY] = true
+            preferences[IS_LOGIN_KEY] = user.token.isNotEmpty()
         }
     }
 
