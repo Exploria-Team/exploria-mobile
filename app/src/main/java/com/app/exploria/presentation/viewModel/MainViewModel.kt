@@ -28,6 +28,9 @@ class MainViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
 
+    private val _isRegistered = MutableStateFlow(false)
+    val isRegistered: StateFlow<Boolean> get() = _isRegistered
+
     fun loadUser() {
         viewModelScope.launch {
             userRepository.getUserSession().collect { userModel ->
@@ -62,10 +65,10 @@ class MainViewModel @Inject constructor(
                         token = loginResponse.token,
                         isLogin = true
                     )
-                    saveSession(userModel)
                     _user.value = loginResponse.user
                     _userModel.value = userModel
                     clearErrorMessage()
+                    saveSession(userModel)
                 } else {
                     _errorMessage.value = "Login gagal, Ulangi lagi."
                 }
@@ -83,16 +86,24 @@ class MainViewModel @Inject constructor(
             val result = userRepository.register(name, email, password)
 
             result.onSuccess {
-                _isLoading.value = false
+                _isRegistered.value = true
                 clearErrorMessage()
             }.onFailure {
                 _errorMessage.value = it.message
-                _isLoading.value = false
             }
+            _isLoading.value = false
         }
     }
 
     fun clearErrorMessage() {
         _errorMessage.value = null
+    }
+
+    fun resetRegistrationState() {
+        _isRegistered.value = false
+    }
+
+    fun setErrorMessage(message: String?) {
+        _errorMessage.value = message
     }
 }
