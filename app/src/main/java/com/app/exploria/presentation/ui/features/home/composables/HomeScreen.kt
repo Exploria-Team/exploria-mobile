@@ -48,7 +48,11 @@ fun HomeScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            HeaderComponent(navController = navController)
+            Box(
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                HeaderComponent(navController = navController)
+            }
         },
         bottomBar = {
             NavigationBottom(navController = navController)

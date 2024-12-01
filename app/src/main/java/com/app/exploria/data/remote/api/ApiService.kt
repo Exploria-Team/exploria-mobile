@@ -1,17 +1,19 @@
 package com.app.exploria.data.remote.api
 
 import com.app.exploria.data.remote.request.FavoriteRequest
+import com.app.exploria.data.remote.request.LoginRequest
 import com.app.exploria.data.remote.request.PlanDestinationRequest
 import com.app.exploria.data.remote.request.PreferencesRequest
+import com.app.exploria.data.remote.request.RegisterRequest
 import com.app.exploria.data.remote.request.ReviewRequest
 import com.app.exploria.data.remote.response.DestinationListResponse
 import com.app.exploria.data.remote.response.DestinationResponse
 import com.app.exploria.data.remote.response.FavoriteResponse
+import com.app.exploria.data.remote.response.LoginResponse
+import com.app.exploria.data.remote.response.RegisterResponse
 import com.app.exploria.data.remote.response.TourGuide
 import com.app.exploria.data.remote.response.TourGuideResponse
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -20,20 +22,11 @@ import retrofit2.http.Query
 
 interface ApiService {
     // Auth
-    @FormUrlEncoded
     @POST("auth/signup")
-    suspend fun register(
-        @Field("name") name: String,
-        @Field("email") email: String,
-        @Field("password") password: String
-    )
+    suspend fun register(@Body registerRequest: RegisterRequest) : RegisterResponse
 
-    @FormUrlEncoded
     @POST("auth/login")
-    suspend fun login(
-        @Field("name") name: String,
-        @Field("password") password: String
-    )
+    suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 
     // User
     @PUT("user/{id}")

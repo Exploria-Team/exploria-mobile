@@ -20,11 +20,12 @@ fun CustomButtonNavigation(
     modifier: Modifier = Modifier
 ) {
     val color = MaterialTheme.colorScheme
+
     Box(
         modifier = modifier
-            .size(35.dp)
+            .size(40.dp)
             .clip(CircleShape)
-            .background(color.background)
+            .background(color.surface)
             .graphicsLayer(
                 shadowElevation = 3f,
                 shape = CircleShape,
@@ -34,8 +35,8 @@ fun CustomButtonNavigation(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = "Back",
-            tint = color.onBackground
+            contentDescription = "Navigation Button",
+            tint = color.onSurface
         )
     }
 }
