@@ -2,13 +2,23 @@ package com.app.exploria.data.repositories
 
 import com.app.exploria.data.remote.api.ApiService
 import com.app.exploria.data.remote.response.DestinationResponse
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
-class DestinationRepository(private val apiService: ApiService) {
+@Singleton
+class DestinationRepository @Inject constructor(    @Named("ApiServiceWithToken") private val apiService: ApiService)
+{
 
     suspend fun getDestinationById(id: Int): Result<DestinationResponse> {
         return try {
             val response = apiService.getDestination(id)
-            Result.success(response)
+
+            if (response.statusCode == 200 && response.data != null && response.data.isNotEmpty()) {
+                Result.success(response.data[0])
+            } else {
+                Result.failure(Exception("No destination found for ID: $id"))
+            }
         } catch (e: Exception) {
             Result.failure(Exception("Error fetching destination: ${e.message}"))
         }
