@@ -6,6 +6,7 @@ import com.app.exploria.data.remote.request.PlanDestinationRequest
 import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.RegisterRequest
 import com.app.exploria.data.remote.request.ReviewRequest
+import com.app.exploria.data.remote.request.UserDataRequest
 import com.app.exploria.data.remote.response.DestinationListResponse
 import com.app.exploria.data.remote.response.DestinationResponse
 import com.app.exploria.data.remote.response.FavoriteResponse
@@ -13,6 +14,7 @@ import com.app.exploria.data.remote.response.LoginResponse
 import com.app.exploria.data.remote.response.RegisterResponse
 import com.app.exploria.data.remote.response.TourGuide
 import com.app.exploria.data.remote.response.TourGuideResponse
+import com.app.exploria.data.remote.response.UserDataResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -29,10 +31,16 @@ interface ApiService {
     suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 
     // User
+    @GET("user/{id}")
+    suspend fun getUserData(
+        @Path("id") id: String
+    ) : UserDataResponse
+
     @PUT("user/{id}")
     suspend fun updateUser(
-        @Path("id") id: String
-    )
+        @Path("id") id: String,
+        @Body userDataRequest: UserDataRequest
+    ) : UserDataResponse
 
     @POST("user/favorite")
     suspend fun favoriteUser(
@@ -52,9 +60,9 @@ interface ApiService {
 
     // Destination
     @GET("destination/{id}")
-    suspend fun getDestination(@Path("id") id: Int) : DestinationResponse
+    suspend fun getDestination(@Path("id") id: Int) : DestinationListResponse
 
-    @GET("destination/search")
+    @GET("destination/")
     suspend fun searchDestination(@Query("search") search : String) : DestinationListResponse
 
     // Review

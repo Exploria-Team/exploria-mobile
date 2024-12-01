@@ -24,6 +24,9 @@ class ApiConfig @Inject constructor() {
                     .build()
                 chain.proceed(request)
             }
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
@@ -43,7 +46,7 @@ class ApiConfig @Inject constructor() {
         val authInterceptor = Interceptor { chain ->
             val request = chain.request()
                 .newBuilder()
-                .addHeader("Authorization", "Bearer $token")
+                .addHeader("Authorization", "$token")
                 .build()
             chain.proceed(request)
         }
@@ -51,6 +54,9 @@ class ApiConfig @Inject constructor() {
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
+            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
@@ -61,4 +67,5 @@ class ApiConfig @Inject constructor() {
 
         return retrofit.create(ApiService::class.java)
     }
+
 }
