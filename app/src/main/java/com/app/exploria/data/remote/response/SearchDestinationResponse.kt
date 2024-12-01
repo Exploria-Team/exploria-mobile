@@ -2,16 +2,16 @@ package com.app.exploria.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class DestinationResponse(
+data class SearchDestinationResponse(
 
 	@field:SerializedName("status_code")
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
+	val data: List<DataItem>
 )
 
-data class Data(
+data class DataItem(
 
 	@field:SerializedName("averageRating")
 	val averageRating: Any,

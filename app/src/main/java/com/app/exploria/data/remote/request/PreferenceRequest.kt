@@ -2,8 +2,8 @@ package com.app.exploria.data.remote.request
 
 import com.google.gson.annotations.SerializedName
 
-data class FavoriteRequest(
+data class PreferenceRequest(
 
-	@field:SerializedName("destinationId")
-	val destinationId: Int
+	@field:SerializedName("preferences")
+	val preferences: List<Int>
 )
