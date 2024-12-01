@@ -5,14 +5,17 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class PlansResponse(
+data class PlanResponse(
 
-	@field:SerializedName("PlansResponse")
-	val plansResponse: List<PlansResponseItem>
+	@field:SerializedName("status_code")
+	val statusCode: Int,
+
+	@field:SerializedName("data")
+	val data: Data
 ) : Parcelable
 
 @Parcelize
-data class PlansResponseItem(
+data class Data(
 
 	@field:SerializedName("id")
 	val id: String,

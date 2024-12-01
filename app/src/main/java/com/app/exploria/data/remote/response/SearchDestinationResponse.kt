@@ -1,7 +1,10 @@
 package com.app.exploria.data.remote.response
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+@Parcelize
 data class SearchDestinationResponse(
 
 	@field:SerializedName("status_code")
@@ -9,12 +12,13 @@ data class SearchDestinationResponse(
 
 	@field:SerializedName("data")
 	val data: List<DataItem>
-)
+) : Parcelable
 
+@Parcelize
 data class DataItem(
 
 	@field:SerializedName("averageRating")
-	val averageRating: Any,
+	val averageRating: String,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -23,7 +27,7 @@ data class DataItem(
 	val description: String,
 
 	@field:SerializedName("lon")
-	val lon: Any,
+	val lon: String,
 
 	@field:SerializedName("id")
 	val id: Int,
@@ -32,5 +36,5 @@ data class DataItem(
 	val cityId: Int,
 
 	@field:SerializedName("lat")
-	val lat: Any
-)
+	val lat: String
+) : Parcelable

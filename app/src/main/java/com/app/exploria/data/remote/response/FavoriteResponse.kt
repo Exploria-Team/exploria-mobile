@@ -1,7 +1,10 @@
 package com.app.exploria.data.remote.response
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+@Parcelize
 data class FavoriteResponse(
 
 	@field:SerializedName("status_code")
@@ -12,8 +15,9 @@ data class FavoriteResponse(
 
 	@field:SerializedName("message")
 	val message: String
-)
+) : Parcelable
 
+@Parcelize
 data class Data(
 
 	@field:SerializedName("date")
@@ -27,4 +31,4 @@ data class Data(
 
 	@field:SerializedName("userId")
 	val userId: String
-)
+) : Parcelable

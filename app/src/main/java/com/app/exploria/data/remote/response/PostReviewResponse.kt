@@ -1,7 +1,10 @@
 package com.app.exploria.data.remote.response
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+@Parcelize
 data class PostReviewResponse(
 
 	@field:SerializedName("status_code")
@@ -9,8 +12,9 @@ data class PostReviewResponse(
 
 	@field:SerializedName("data")
 	val data: Data
-)
+) : Parcelable
 
+@Parcelize
 data class Data(
 
 	@field:SerializedName("reviewDate")
@@ -30,4 +34,4 @@ data class Data(
 
 	@field:SerializedName("reviewText")
 	val reviewText: String
-)
+) : Parcelable

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class PreferenceResponse(
+data class GetTourGuideByIdResponse(
 
 	@field:SerializedName("status_code")
 	val statusCode: Int,

@@ -1,27 +1,31 @@
 package com.app.exploria.data.remote.response
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
+@Parcelize
 data class PlanDestinationResponse(
 
 	@field:SerializedName("status_code")
 	val statusCode: Int,
 
-	@field:SerializedName("message")
-	val message: List<MessageItem>
-)
+	@field:SerializedName("data")
+	val data: Data
+) : Parcelable
 
-data class MessageItem(
+@Parcelize
+data class Data(
 
-	@field:SerializedName("path")
-	val path: List<String>,
+	@field:SerializedName("date")
+	val date: String,
 
-	@field:SerializedName("code")
-	val code: String,
+	@field:SerializedName("planId")
+	val planId: String,
 
-	@field:SerializedName("message")
-	val message: String,
+	@field:SerializedName("id")
+	val id: String,
 
-	@field:SerializedName("validation")
-	val validation: String
-)
+	@field:SerializedName("destinationId")
+	val destinationId: Int
+) : Parcelable
