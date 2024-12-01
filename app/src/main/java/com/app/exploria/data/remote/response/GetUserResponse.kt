@@ -5,26 +5,20 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class LoginResponse(
+data class GetUserResponse(
 
-	@field:SerializedName("user")
-	val user: User,
+	@field:SerializedName("status_code")
+	val statusCode: Int,
 
-	@field:SerializedName("token")
-	val token: String
+	@field:SerializedName("data")
+	val data: Data
 ) : Parcelable
 
 @Parcelize
-data class User(
+data class Data(
 
 	@field:SerializedName("profilePictureUrl")
 	val profilePictureUrl: String,
-
-	@field:SerializedName("createdAt")
-	val createdAt: String,
-
-	@field:SerializedName("password")
-	val password: String,
 
 	@field:SerializedName("birthdate")
 	val birthdate: String,
@@ -36,8 +30,5 @@ data class User(
 	val id: String,
 
 	@field:SerializedName("email")
-	val email: String,
-
-	@field:SerializedName("updatedAt")
-	val updatedAt: String
+	val email: String
 ) : Parcelable
