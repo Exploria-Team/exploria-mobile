@@ -30,7 +30,7 @@ class ApiConfig @Inject constructor() {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://exploria-361650332079.asia-southeast2.run.app/api/v1/")
+            .baseUrl("https://exploriaaaa-57676271991.asia-southeast2.run.app/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -60,7 +60,7 @@ class ApiConfig @Inject constructor() {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://exploria-361650332079.asia-southeast2.run.app/api/v1/")
+            .baseUrl("https://exploriaaaa-57676271991.asia-southeast2.run.app/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
