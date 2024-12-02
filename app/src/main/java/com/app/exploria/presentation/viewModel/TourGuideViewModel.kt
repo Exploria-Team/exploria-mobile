@@ -1,7 +1,9 @@
 package com.app.exploria.presentation.viewModel
 
 import androidx.lifecycle.viewModelScope
-import com.app.exploria.data.remote.response.TourGuide
+import com.app.exploria.data.remote.response.GetTourGuideByIdData
+import com.app.exploria.data.remote.response.GetTourGuidesData
+import com.app.exploria.data.remote.response.SearchTourGuideData
 import com.app.exploria.data.repositories.TourGuideRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,11 +14,14 @@ import javax.inject.Inject
 @HiltViewModel
 class TourGuideViewModel @Inject constructor(private val tourGuideRepository: TourGuideRepository) : BaseViewModel() {
 
-    private val _listTourGuide = MutableStateFlow<List<TourGuide>>(emptyList())
-    val listTourGuide: StateFlow<List<TourGuide>> get() = _listTourGuide
+    private val _listTourGuide = MutableStateFlow<List<SearchTourGuideData>>(emptyList())
+    val listTourGuide: StateFlow<List<SearchTourGuideData>> get() = _listTourGuide
 
-    private val _selectedTourGuide = MutableStateFlow<TourGuide?>(null)
-    val selectedTourGuide: StateFlow<TourGuide?> get() = _selectedTourGuide
+    private val _allTourGuide = MutableStateFlow<List<GetTourGuidesData>>(emptyList())
+    val allTourGuide: StateFlow<List<GetTourGuidesData>> get() = _allTourGuide
+
+    private val _selectedTourGuide = MutableStateFlow<GetTourGuideByIdData?>(null)
+    val selectedTourGuide: StateFlow<GetTourGuideByIdData?> get() = _selectedTourGuide
 
     fun searchTourGuide(search: String) {
         setLoading(true)
@@ -51,7 +56,7 @@ class TourGuideViewModel @Inject constructor(private val tourGuideRepository: To
         viewModelScope.launch {
             val result = tourGuideRepository.getAllTourGuides()
             result.onSuccess { data ->
-                _listTourGuide.value = data
+                _allTourGuide.value = data
                 clearErrorMessage()
             }.onFailure { exception ->
                 setErrorMessage(exception.message ?: "Failed to load tour guides.")

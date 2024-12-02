@@ -18,7 +18,7 @@ data class SearchDestinationResponse(
 data class SearchDestinationDataItem(
 
 	@field:SerializedName("averageRating")
-	val averageRating: String,
+	val averageRating: Float,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -27,7 +27,7 @@ data class SearchDestinationDataItem(
 	val description: String,
 
 	@field:SerializedName("lon")
-	val lon: String,
+	val lon: Double,
 
 	@field:SerializedName("id")
 	val id: Int,
@@ -36,5 +36,5 @@ data class SearchDestinationDataItem(
 	val cityId: Int,
 
 	@field:SerializedName("lat")
-	val lat: String
+	val lat: Double
 ) : Parcelable

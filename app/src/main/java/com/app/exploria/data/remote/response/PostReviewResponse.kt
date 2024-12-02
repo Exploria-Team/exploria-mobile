@@ -21,7 +21,7 @@ data class PostReviewData(
 	val reviewDate: String,
 
 	@field:SerializedName("rating")
-	val rating: Int,
+	val rating: Float,
 
 	@field:SerializedName("id")
 	val id: String,

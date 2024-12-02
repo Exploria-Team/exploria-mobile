@@ -2,7 +2,7 @@ package com.app.exploria.data.repositories
 
 import com.app.exploria.data.remote.api.ApiService
 import com.app.exploria.data.remote.request.FavoriteRequest
-import com.app.exploria.data.remote.response.DataItem
+import com.app.exploria.data.remote.response.GetAllUserFavoriteDataItem
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class UserFavoriteRepository @Inject constructor(
         }
     }
 
-    suspend fun getAllFavorites(): Result<List<DataItem>> {
+    suspend fun getAllFavorites(): Result<List<GetAllUserFavoriteDataItem>> {
         return try {
             val response = apiService.getAllUserFavorite()
             if (response.statusCode == 200) {

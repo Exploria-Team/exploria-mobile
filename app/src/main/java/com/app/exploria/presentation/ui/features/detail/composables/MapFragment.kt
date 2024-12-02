@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,7 +17,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapFragment(lat: Float, lon: Float) {
+fun MapFragment(lat: Double, lon: Double) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,7 +36,7 @@ fun MapFragment(lat: Float, lon: Float) {
                 .height(200.dp)
                 .padding(top = 16.dp)
         ) {
-            val location = LatLng(lat.toDouble(), lon.toDouble()) // Sample coordinates (replace with dynamic data if needed)
+            val location = LatLng(lat, lon)
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(location, 15f)
             }

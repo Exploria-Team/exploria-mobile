@@ -1,8 +1,8 @@
 package com.app.exploria.presentation.viewModel
 
 import androidx.lifecycle.viewModelScope
-import com.app.exploria.data.remote.response.DestinationResponse
 import com.app.exploria.data.remote.response.GetDestinationByIdResponse
+import com.app.exploria.data.remote.response.SearchDestinationDataItem
 import com.app.exploria.data.repositories.DestinationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +15,8 @@ class DestinationViewModel @Inject constructor(private val destinationRepository
     private val _destinationData = MutableStateFlow<GetDestinationByIdResponse?>(null)
     val destinationData: StateFlow<GetDestinationByIdResponse?> get() = _destinationData
 
-    private val _listDestination = MutableStateFlow<List<DestinationResponse>?>(null)
-    val listDestinationData: StateFlow<List<DestinationResponse>?> get() = _listDestination
+    private val _listDestination = MutableStateFlow<List<SearchDestinationDataItem>?>(null)
+    val listDestinationData: StateFlow<List<SearchDestinationDataItem>?> get() = _listDestination
 
     fun getDestinationById(id: Int) {
         setLoading(true)

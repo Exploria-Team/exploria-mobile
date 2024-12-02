@@ -24,7 +24,7 @@ data class DestinationResponse(
 	val visitDurationMinutes: Int,
 
 	@field:SerializedName("averageRating")
-	val averageRating: String,
+	val averageRating: Float,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -33,7 +33,7 @@ data class DestinationResponse(
 	val description: String,
 
 	@field:SerializedName("lon")
-	val lon: Float,
+	val lon: Double,
 
 	@field:SerializedName("id")
 	val id: Int,
@@ -42,5 +42,5 @@ data class DestinationResponse(
 	val cityId: Int,
 
 	@field:SerializedName("lat")
-	val lat: Float
+	val lat: Double
 ) : Parcelable

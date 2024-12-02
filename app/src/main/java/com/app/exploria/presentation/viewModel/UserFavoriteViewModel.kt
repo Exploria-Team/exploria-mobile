@@ -1,7 +1,7 @@
 package com.app.exploria.presentation.viewModel
 
 import androidx.lifecycle.viewModelScope
-import com.app.exploria.data.remote.response.DataItem
+import com.app.exploria.data.remote.response.GetAllUserFavoriteDataItem
 import com.app.exploria.data.repositories.UserFavoriteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class UserFavoriteViewModel @Inject constructor(private val userFavoriteRepository: UserFavoriteRepository): BaseViewModel() {
-    private val _favorites = MutableStateFlow<List<DataItem>>(emptyList())
-    val Favorites: StateFlow<List<DataItem>> get() = _favorites
+    private val _favorites = MutableStateFlow<List<GetAllUserFavoriteDataItem>>(emptyList())
+    val Favorites: StateFlow<List<GetAllUserFavoriteDataItem>> get() = _favorites
 
     fun toggleFavorite(destinationId: Int) {
         setLoading(true)

@@ -15,7 +15,7 @@ data class GetReviewResponse(
 ) : Parcelable
 
 @Parcelize
-data class Destination(
+data class DestinationId(
 
 	@field:SerializedName("name")
 	val name: String,
@@ -44,10 +44,10 @@ data class GetReviewDataItem(
 	val reviewDate: String,
 
 	@field:SerializedName("rating")
-	val rating: Int,
+	val rating: Float,
 
 	@field:SerializedName("destination")
-	val destination: Destination,
+	val destination: DestinationId,
 
 	@field:SerializedName("id")
 	val id: String,
