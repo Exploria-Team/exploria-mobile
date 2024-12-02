@@ -30,5 +30,8 @@ data class Data(
 	val id: String? = null,
 
 	@field:SerializedName("email")
-	val email: String? = null
+	val email: String? = null,
+
+	@field:SerializedName("age")
+	val age: Int? = null
 ) : Parcelable

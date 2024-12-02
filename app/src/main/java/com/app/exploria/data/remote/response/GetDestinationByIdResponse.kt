@@ -11,14 +11,20 @@ data class GetDestinationByIdResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
+	val data: DestinationByIdData
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class DestinationByIdData(
+
+	@field:SerializedName("entryFee")
+	val entryFee: Int,
+
+	@field:SerializedName("visitDurationMinutes")
+	val visitDurationMinutes: Int,
 
 	@field:SerializedName("averageRating")
-	val averageRating: String,
+	val averageRating: Float,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -27,7 +33,7 @@ data class Data(
 	val description: String,
 
 	@field:SerializedName("lon")
-	val lon: String,
+	val lon: Float,
 
 	@field:SerializedName("id")
 	val id: Int,
@@ -36,5 +42,5 @@ data class Data(
 	val cityId: Int,
 
 	@field:SerializedName("lat")
-	val lat: String
+	val lat: Float
 ) : Parcelable
