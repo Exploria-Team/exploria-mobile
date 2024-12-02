@@ -11,11 +11,11 @@ data class PlanResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
+	val data: PlanData
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class PlanData(
 
 	@field:SerializedName("id")
 	val id: String,

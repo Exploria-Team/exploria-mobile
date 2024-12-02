@@ -18,7 +18,7 @@ data class FavoriteResponse(
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class FavoriteData(
 
 	@field:SerializedName("date")
 	val date: String,

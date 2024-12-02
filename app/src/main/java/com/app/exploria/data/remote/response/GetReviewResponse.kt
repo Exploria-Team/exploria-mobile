@@ -11,7 +11,7 @@ data class GetReviewResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<DataItem>
+	val data: List<GetReviewDataItem>
 ) : Parcelable
 
 @Parcelize
@@ -38,7 +38,7 @@ data class User(
 ) : Parcelable
 
 @Parcelize
-data class DataItem(
+data class GetReviewDataItem(
 
 	@field:SerializedName("reviewDate")
 	val reviewDate: String,
