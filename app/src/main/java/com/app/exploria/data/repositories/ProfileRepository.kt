@@ -12,7 +12,7 @@ class ProfileRepository @Inject constructor(
     @Named("ApiServiceWithToken") private val apiService: ApiService
 ) {
 
-    suspend fun getUserData(id: String): Result<Data> {
+    suspend fun getUserData(id: Int): Result<Data> {
         return try {
             val response = apiService.getUserData(id)
             if (response.statusCode == 200 && response.data != null) {
@@ -26,7 +26,7 @@ class ProfileRepository @Inject constructor(
     }
 
     suspend fun updateUserData(
-        id: String,
+        id: Int,
         name: String?,
         email: String?,
         profilePictureUrl: String?,

@@ -16,7 +16,7 @@ class ProfileViewModel @Inject constructor(
     private val _userData = MutableStateFlow<Data?>(null)
     val userData: StateFlow<Data?> get() = _userData
 
-    fun getDataUser(id: String) {
+    fun getDataUser(id: Int) {
         setLoading(true)
         viewModelScope.launch {
             val result = profileRepository.getUserData(id)
@@ -32,7 +32,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun updateDataUser(
-        id: String,
+        id: Int,
         name: String?,
         email: String?,
         profilePictureUrl: String?,
