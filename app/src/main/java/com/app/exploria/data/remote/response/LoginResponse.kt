@@ -26,17 +26,17 @@ data class LoginUser(
 	@field:SerializedName("password")
 	val password: String,
 
-	@field:SerializedName("birthdate")
-	val birthdate: String,
-
 	@field:SerializedName("name")
 	val name: String,
 
 	@field:SerializedName("id")
-	val id: String,
+	val id: Int,
 
 	@field:SerializedName("email")
 	val email: String,
+
+	@field:SerializedName("age")
+	val age: Int,
 
 	@field:SerializedName("updatedAt")
 	val updatedAt: String

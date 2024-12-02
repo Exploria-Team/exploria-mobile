@@ -25,9 +25,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.exploria.data.remote.response.DestinationResponse
+import com.app.exploria.data.remote.response.GetDestinationByIdResponse
 
 @Composable
-fun BodyDetailComponent(destinationData: DestinationResponse) {
+fun BodyDetailComponent(destinationData: GetDestinationByIdResponse) {
 
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("Deskripsi", "Ulasan", "Peta")
@@ -42,7 +43,7 @@ fun BodyDetailComponent(destinationData: DestinationResponse) {
         item {
             // Judul Destinasi
             Text(
-                text = destinationData.name ?: "Nama tidak tersedia",
+                text = destinationData.data.name ?: "Nama tidak tersedia",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
@@ -70,90 +71,8 @@ fun BodyDetailComponent(destinationData: DestinationResponse) {
 
     // Konten Berdasarkan Tab
     when (selectedTab) {
-        0 -> DetailFragment(description = destinationData.description)
-        1 -> UlasanFragment()
-        2 -> PetaFragment()
-    }
-}
-
-
-@Composable
-fun DetailFragment(description: String?) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = description ?: "Deskripsi tidak tersedia",
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = "Aktivitas Wisata",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-
-@Composable
-fun UlasanFragment() {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Aktivitas Wisata",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Button(
-                    onClick = {},
-                    enabled = true
-                ) {
-                    Text("Tulis Ulasan")
-                }
-            }
-        }
-        items(5) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                ReviewCard()
-            }
-        }
-    }
-}
-
-@Composable
-fun PetaFragment() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Jl. Pantai Kuta No.32, Legian, Badung, Kabupaten Badung, Bali",
-            fontSize = 16.sp
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(top = 16.dp)
-        ) {
-            Text(text = "[Map Placeholder]", modifier = Modifier.align(Alignment.Center))
-        }
+        0 -> DetailFragment(description = destinationData.data.description)
+        1 -> ReviewFragment()
+        2 -> MapFragment(lat = destinationData.data.lat, lon = destinationData.data.lat)
     }
 }

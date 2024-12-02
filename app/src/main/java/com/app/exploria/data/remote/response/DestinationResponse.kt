@@ -1,20 +1,30 @@
 package com.app.exploria.data.remote.response
 
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-data class DestinationResponse(
+@Parcelize
+data class DestinationListResponse(
 
 	@field:SerializedName("status_code")
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
-)
+	val data: List<DestinationResponse>
+) : Parcelable
 
-data class DestinationData(
+@Parcelize
+data class DestinationResponse(
+
+	@field:SerializedName("entryFee")
+	val entryFee: Int,
+
+	@field:SerializedName("visitDurationMinutes")
+	val visitDurationMinutes: Int,
 
 	@field:SerializedName("averageRating")
-	val averageRating: Any,
+	val averageRating: String,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -23,7 +33,7 @@ data class DestinationData(
 	val description: String,
 
 	@field:SerializedName("lon")
-	val lon: Any,
+	val lon: Float,
 
 	@field:SerializedName("id")
 	val id: Int,
@@ -32,5 +42,5 @@ data class DestinationData(
 	val cityId: Int,
 
 	@field:SerializedName("lat")
-	val lat: Any
-)
+	val lat: Float
+) : Parcelable

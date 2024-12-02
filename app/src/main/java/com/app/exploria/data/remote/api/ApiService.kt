@@ -8,8 +8,8 @@ import com.app.exploria.data.remote.request.RegisterRequest
 import com.app.exploria.data.remote.request.ReviewRequest
 import com.app.exploria.data.remote.request.UserDataRequest
 import com.app.exploria.data.remote.response.DestinationListResponse
-import com.app.exploria.data.remote.response.DestinationResponse
 import com.app.exploria.data.remote.response.FavoriteResponse
+import com.app.exploria.data.remote.response.GetDestinationByIdResponse
 import com.app.exploria.data.remote.response.LoginResponse
 import com.app.exploria.data.remote.response.RegisterResponse
 import com.app.exploria.data.remote.response.TourGuide
@@ -33,12 +33,12 @@ interface ApiService {
     // User
     @GET("user/{id}")
     suspend fun getUserData(
-        @Path("id") id: String
+        @Path("id") id: Int
     ) : UserDataResponse
 
     @PUT("user/{id}")
     suspend fun updateUser(
-        @Path("id") id: String,
+        @Path("id") id: Int,
         @Body userDataRequest: UserDataRequest
     ) : UserDataResponse
 
@@ -60,7 +60,7 @@ interface ApiService {
 
     // Destination
     @GET("destination/{id}")
-    suspend fun getDestination(@Path("id") id: Int) : DestinationListResponse
+    suspend fun getDestination(@Path("id") id: Int) : GetDestinationByIdResponse
 
     @GET("destination/")
     suspend fun searchDestination(@Query("search") search : String) : DestinationListResponse
