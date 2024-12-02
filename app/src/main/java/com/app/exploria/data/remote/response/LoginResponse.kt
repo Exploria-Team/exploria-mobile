@@ -8,14 +8,14 @@ import com.google.gson.annotations.SerializedName
 data class LoginResponse(
 
 	@field:SerializedName("user")
-	val user: User,
+	val user: LoginUser,
 
 	@field:SerializedName("token")
 	val token: String
 ) : Parcelable
 
 @Parcelize
-data class User(
+data class LoginUser(
 
 	@field:SerializedName("profilePictureUrl")
 	val profilePictureUrl: String,

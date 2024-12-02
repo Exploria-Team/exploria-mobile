@@ -11,24 +11,24 @@ data class GetAllUserFavoriteResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<DataItem>
+	val data: List<GetAllUserFavoriteDataItem>
 ) : Parcelable
 
 @Parcelize
-data class DataItem(
+data class GetAllUserFavoriteDataItem(
 
 	@field:SerializedName("date")
 	val date: String,
 
 	@field:SerializedName("destination")
-	val destination: Destination,
+	val destination: GetAllUserFavoriteDestination,
 
 	@field:SerializedName("id")
 	val id: Int
 ) : Parcelable
 
 @Parcelize
-data class Destination(
+data class GetAllUserFavoriteDestination(
 
 	@field:SerializedName("city")
 	val city: String,

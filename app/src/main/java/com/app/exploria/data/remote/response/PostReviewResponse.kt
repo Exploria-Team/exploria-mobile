@@ -11,11 +11,11 @@ data class PostReviewResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
+	val data: PostReviewData
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class PostReviewData(
 
 	@field:SerializedName("reviewDate")
 	val reviewDate: String,
