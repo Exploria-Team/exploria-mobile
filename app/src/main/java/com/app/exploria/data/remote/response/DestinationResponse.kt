@@ -11,7 +11,7 @@ data class DestinationResponse(
 	val data: Data
 )
 
-data class Data(
+data class DestinationData(
 
 	@field:SerializedName("averageRating")
 	val averageRating: Any,

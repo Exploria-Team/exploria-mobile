@@ -11,11 +11,11 @@ data class GetUserResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
+	val data: GetUserData
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class GetUserData(
 
 	@field:SerializedName("profilePictureUrl")
 	val profilePictureUrl: String,

@@ -11,11 +11,11 @@ data class SearchDestinationResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<DataItem>
+	val data: List<SearchDestinationDataItem>
 ) : Parcelable
 
 @Parcelize
-data class DataItem(
+data class SearchDestinationDataItem(
 
 	@field:SerializedName("averageRating")
 	val averageRating: String,

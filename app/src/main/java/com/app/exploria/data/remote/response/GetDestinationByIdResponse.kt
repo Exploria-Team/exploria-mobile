@@ -11,11 +11,11 @@ data class GetDestinationByIdResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: Data
+	val data: GetDestinationByIdData
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class GetDestinationByIdData(
 
 	@field:SerializedName("averageRating")
 	val averageRating: String,

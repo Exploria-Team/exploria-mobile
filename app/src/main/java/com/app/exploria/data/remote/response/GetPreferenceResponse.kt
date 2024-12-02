@@ -11,11 +11,11 @@ data class GetPreferenceResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<DataItem>
+	val data: List<GetPreferenceDataItem>
 ) : Parcelable
 
 @Parcelize
-data class DataItem(
+data class GetPreferenceDataItem(
 
 	@field:SerializedName("name")
 	val name: String,
