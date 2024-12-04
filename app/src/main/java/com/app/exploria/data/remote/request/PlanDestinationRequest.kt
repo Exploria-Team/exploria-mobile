@@ -11,5 +11,5 @@ data class PlanDestinationRequest(
 	val planId: String,
 
 	@field:SerializedName("destinationId")
-	val destinationId: Int
+		val destinationId: Int
 )
