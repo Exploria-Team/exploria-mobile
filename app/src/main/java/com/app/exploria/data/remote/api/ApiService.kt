@@ -8,6 +8,7 @@ import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.RegisterRequest
 import com.app.exploria.data.remote.request.ReviewRequest
 import com.app.exploria.data.remote.request.UserDataRequest
+import com.app.exploria.data.remote.response.GetAllDestinationResponse
 import com.app.exploria.data.remote.response.GetAllUserFavoriteResponse
 import com.app.exploria.data.remote.response.GetDestinationByIdResponse
 import com.app.exploria.data.remote.response.GetPlanDestinationByIdResponse
@@ -23,6 +24,7 @@ import com.app.exploria.data.remote.response.PostPlanResponse
 import com.app.exploria.data.remote.response.PostReviewResponse
 import com.app.exploria.data.remote.response.PreferenceResponse
 import com.app.exploria.data.remote.response.RegisterResponse
+import com.app.exploria.data.remote.response.SearchDestinationData
 import com.app.exploria.data.remote.response.SearchDestinationResponse
 import com.app.exploria.data.remote.response.SearchTourGuideResponse
 import com.app.exploria.data.remote.response.UserDataResponse
@@ -70,6 +72,12 @@ interface ApiService {
     suspend fun getPreferences() : GetPreferenceResponse
 
     // Destination
+    @GET("destination")
+    suspend fun getAllDestinations(
+        @Query("page") page : Int,
+        @Query("size") size : Int,
+    ) : GetAllDestinationResponse
+
     @GET("destination/{id}")
     suspend fun getDestination(@Path("id") id: Int) : GetDestinationByIdResponse
 
@@ -77,8 +85,12 @@ interface ApiService {
     suspend fun searchDestination(@Query("search") search : String) : SearchDestinationResponse
 
     // Review
-    @GET("review")
-    suspend fun getReview() : GetReviewResponse
+    @GET("review/destination/{id}")
+    suspend fun getReviews(
+        @Path("id") id: Int,
+        @Query("page") page : Int,
+        @Query("size") size : Int,
+    ) : GetReviewResponse
 
     @POST("review")
     suspend fun submitReview(
