@@ -11,35 +11,33 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.app.exploria.R
+import com.app.exploria.data.remote.response.ReviewsItem
+import com.gowtham.ratingbar.RatingBar
+import com.gowtham.ratingbar.RatingBarStyle
 
 @Composable
-fun ReviewCard() {
+fun ReviewCard(review: ReviewsItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainer)
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
@@ -51,33 +49,29 @@ fun ReviewCard() {
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f)) {
+                Column(modifier = Modifier.weight(1f).padding(bottom = 16.dp)) {
                     Row {
-                        Text(text = "4", style = MaterialTheme.typography.titleLarge)
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "Rating Star",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(24.dp)
+                        RatingBar(
+                            value = review.rating.toFloat(),
+                            style = RatingBarStyle.Fill(),
+                            size = 16.dp,
+                            spaceBetween = 1.dp,
+                            onValueChange = {},
+                            onRatingChanged = {
+                            }
                         )
                     }
-                    Text(text = "Rizki Sepriadi", style = MaterialTheme.typography.titleMedium)
+                    Text(text = review.user.name ?: "Unknown", style = MaterialTheme.typography.titleMedium)
                 }
                 Column(
                     horizontalAlignment = Alignment.End,
                     modifier = Modifier.wrapContentWidth()
                 ) {
-                    IconButton(onClick = { /* TODO: Handle more options */ }) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "More options",
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
                     Text(
-                        text = "2 Minggu lalu",
+                        text = review.reviewDate ?: "Date not available",
                         color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.align(Alignment.End)
+                        modifier = Modifier.align(Alignment.End),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
@@ -85,9 +79,9 @@ fun ReviewCard() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Saya sangat menyukai pantai ini. saya bisa berselancar, menikmati sunset dan juga makan makanan enak",
+                text = review.reviewText ?: "No comment",
                 modifier = Modifier.padding(top = 8.dp),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }

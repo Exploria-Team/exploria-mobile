@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.app.exploria.R
 import com.app.exploria.presentation.ui.components.EmptyView
 import com.app.exploria.presentation.viewModel.DestinationViewModel
 
@@ -33,9 +32,6 @@ fun DetailScreen(id: String?, navController: NavController) {
         }
     }
 
-    println("Destination Data: ${destinationData}")
-
-
     Scaffold(
         topBar = {
             Box(
@@ -48,14 +44,8 @@ fun DetailScreen(id: String?, navController: NavController) {
         Surface(color = MaterialTheme.colorScheme.surface) {
             if (destinationData != null) {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    ImagePreviewComponent(
-                        images = listOf(
-                            R.drawable.img2,
-                            R.drawable.img2,
-                            R.drawable.img2,
-                        )
-                    )
-                    BodyDetailComponent(destinationData!!)
+                    ImagePreviewComponent(destinationData!!)
+                    BodyDetailComponent(navController, destinationData!!)
                 }
             } else {
                 EmptyView("Mohon Tunggu")

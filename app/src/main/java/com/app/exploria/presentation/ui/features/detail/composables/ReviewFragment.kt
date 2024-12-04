@@ -1,53 +1,54 @@
 package com.app.exploria.presentation.ui.features.detail.composables
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.app.exploria.presentation.viewModel.ReviewViewModel
 
 @Composable
-fun ReviewFragment() {
+fun ReviewFragment(navController: NavController, id: Int) {
+    val reviewViewModel: ReviewViewModel = hiltViewModel()
+
+    val reviews = reviewViewModel.reviewData.collectAsLazyPagingItems()
+
+    LaunchedEffect(Unit) {
+        reviewViewModel.getReviews(id)
+    }
+
+    println("Reviews Data: ${reviews}")
+    println("Review count: ${reviews.itemCount}")
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Aktivitas Wisata",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Button(
-                    onClick = {},
-                    enabled = true
-                ) {
-                    Text("Tulis Ulasan")
-                }
+        if (reviews.loadState.refresh is LoadState.Loading) {
+            item {
+                CircularProgressIndicator()
             }
         }
-        items(5) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                ReviewCard()
+
+        items(reviews.itemCount) { item ->
+            reviews[item]?.let {
+                ReviewCard(review = it)
+            }
+        }
+
+        if (reviews.loadState.append is LoadState.Error) {
+            item {
+                Text("Error loading reviews.")
             }
         }
     }
 }
+
