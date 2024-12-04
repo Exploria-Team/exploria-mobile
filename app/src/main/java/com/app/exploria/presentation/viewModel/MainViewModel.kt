@@ -3,7 +3,7 @@ package com.app.exploria.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.exploria.data.models.userData.UserModel
-import com.app.exploria.data.remote.response.User
+import com.app.exploria.data.remote.response.LoginUser
 import com.app.exploria.data.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +15,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
-    private val _user = MutableStateFlow<User?>(null)
-    val user: StateFlow<User?> get() = _user
+    private val _user = MutableStateFlow<LoginUser?>(null)
+    val user: StateFlow<LoginUser?> get() = _user
 
     private val _userModel =
         MutableStateFlow<UserModel?>(null)

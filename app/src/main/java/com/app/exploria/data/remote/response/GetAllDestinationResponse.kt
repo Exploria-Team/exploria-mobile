@@ -5,23 +5,29 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class DestinationListResponse(
+data class GetAllDestinationResponse(
 
 	@field:SerializedName("status_code")
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<DestinationResponse>
+	val data: GetAllDestinationData
 ) : Parcelable
 
 @Parcelize
-data class DestinationResponse(
+data class AllDestinationsItem(
 
 	@field:SerializedName("entryFee")
 	val entryFee: Int,
 
+	@field:SerializedName("photoUrls")
+	val photoUrls: List<String>,
+
 	@field:SerializedName("visitDurationMinutes")
 	val visitDurationMinutes: Int,
+
+	@field:SerializedName("city")
+	val city: String,
 
 	@field:SerializedName("averageRating")
 	val averageRating: Float,
@@ -38,9 +44,32 @@ data class DestinationResponse(
 	@field:SerializedName("id")
 	val id: Int,
 
-	@field:SerializedName("cityId")
-	val cityId: Int,
-
 	@field:SerializedName("lat")
 	val lat: Double
+) : Parcelable
+
+@Parcelize
+data class GetAllDestinationData(
+
+	@field:SerializedName("pagination")
+	val pagination: AllPagination,
+
+	@field:SerializedName("destinations")
+	val destinations: List<AllDestinationsItem>
+) : Parcelable
+
+@Parcelize
+data class AllPagination(
+
+	@field:SerializedName("totalItems")
+	val totalItems: Int,
+
+	@field:SerializedName("totalPages")
+	val totalPages: Int,
+
+	@field:SerializedName("pageSize")
+	val pageSize: Int,
+
+	@field:SerializedName("currentPage")
+	val currentPage: Int
 ) : Parcelable

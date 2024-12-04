@@ -34,7 +34,7 @@ data class GetAllUserFavoriteDestination(
 	val city: String,
 
 	@field:SerializedName("averageRating")
-	val averageRating: String,
+	val averageRating: Float,
 
 	@field:SerializedName("name")
 	val name: String,

@@ -70,7 +70,7 @@ fun SelectDestinationScreen(navController: NavController, modifier: Modifier = M
                     .padding(horizontal = 16.dp)
             ) {
                 items(favorites) { recomendation ->
-                    ItemList(navController, image = recomendation)
+                    ItemList(navController)
                 }
             }
         }

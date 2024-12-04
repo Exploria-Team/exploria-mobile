@@ -11,17 +11,36 @@ data class GetReviewResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<GetReviewDataItem>
+	val data: GetReviewData
 ) : Parcelable
 
 @Parcelize
-data class Destination(
+data class GetReviewData(
 
-	@field:SerializedName("name")
-	val name: String,
+	@field:SerializedName("pagination")
+	val pagination: ReviewPagination,
+
+	@field:SerializedName("reviews")
+	val reviews: List<ReviewsItem>
+) : Parcelable
+
+@Parcelize
+data class ReviewsItem(
+
+	@field:SerializedName("reviewDate")
+	val reviewDate: String,
+
+	@field:SerializedName("rating")
+	val rating: Int,
 
 	@field:SerializedName("id")
-	val id: Int
+	val id: String,
+
+	@field:SerializedName("user")
+	val user: User,
+
+	@field:SerializedName("reviewText")
+	val reviewText: String
 ) : Parcelable
 
 @Parcelize
@@ -34,33 +53,21 @@ data class User(
 	val name: String,
 
 	@field:SerializedName("id")
-	val id: String
+	val id: Int
 ) : Parcelable
 
 @Parcelize
-data class GetReviewDataItem(
+data class ReviewPagination(
 
-	@field:SerializedName("reviewDate")
-	val reviewDate: String,
+	@field:SerializedName("totalItems")
+	val totalItems: Int,
 
-	@field:SerializedName("rating")
-	val rating: Int,
+	@field:SerializedName("totalPages")
+	val totalPages: Int,
 
-	@field:SerializedName("destination")
-	val destination: Destination,
+	@field:SerializedName("pageSize")
+	val pageSize: Int,
 
-	@field:SerializedName("id")
-	val id: String,
-
-	@field:SerializedName("destinationId")
-	val destinationId: Int,
-
-	@field:SerializedName("userId")
-	val userId: String,
-
-	@field:SerializedName("user")
-	val user: User,
-
-	@field:SerializedName("reviewText")
-	val reviewText: String
+	@field:SerializedName("currentPage")
+	val currentPage: Int
 ) : Parcelable

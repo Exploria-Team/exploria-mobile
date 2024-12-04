@@ -5,8 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import com.app.exploria.data.database.ItinerariesDatabase
-import com.app.exploria.data.database.dao.ItinerariesDao
+import com.app.exploria.data.database.AppDatabase
+import com.app.exploria.data.database.dao.DestinationDao
 import com.app.exploria.data.pref.UserPreference
 import com.app.exploria.data.remote.api.ApiConfig
 import com.app.exploria.data.remote.api.ApiService
@@ -29,17 +29,18 @@ object Module {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): ItinerariesDatabase {
+    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            ItinerariesDatabase::class.java,
-            "itineraries_database"
+            AppDatabase::class.java,
+            "app_database"
         ).build()
     }
 
     @Provides
-    fun provideItinerariesDao(database: ItinerariesDatabase): ItinerariesDao {
-        return database.itinerariesDao()
+    @Singleton
+    fun provideDestinationDao(appDatabase: AppDatabase): DestinationDao {
+        return appDatabase.destinationDao()
     }
 
     @Provides

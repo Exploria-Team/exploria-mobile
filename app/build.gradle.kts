@@ -75,6 +75,8 @@ secrets {
 dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation (libs.compose.ratingbar)
+
 
     //compose
     val composeBom = platform(libs.androidx.compose.bom)
@@ -163,4 +165,8 @@ dependencies {
     //maps
     implementation (libs.maps.compose)
     implementation (libs.play.services.maps)
+
+    //Paging 3
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.room.paging)
 }

@@ -84,7 +84,7 @@ fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) 
                     .padding(horizontal = 16.dp)
             ) {
                 items(favorites) { recommendation ->
-                    ItemList(navController, image = recommendation)
+                    ItemList(navController)
                 }
             }
         }

@@ -11,14 +11,52 @@ data class SearchDestinationResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<SearchDestinationDataItem>
+	val data: SearchDestinationData
+) : Parcelable
+
+@Parcelize
+data class Pagination(
+
+	@field:SerializedName("totalItems")
+	val totalItems: Int,
+
+	@field:SerializedName("totalPages")
+	val totalPages: Int,
+
+	@field:SerializedName("pageSize")
+	val pageSize: Int,
+
+	@field:SerializedName("currentPage")
+	val currentPage: Int
+) : Parcelable
+
+@Parcelize
+data class SearchDestinationData(
+
+	@field:SerializedName("pagination")
+	val pagination: Pagination,
+
+	@field:SerializedName("destinations")
+	val destinations: List<SearchDestinationDataItem>
 ) : Parcelable
 
 @Parcelize
 data class SearchDestinationDataItem(
 
+	@field:SerializedName("entryFee")
+	val entryFee: Int,
+
+	@field:SerializedName("photoUrls")
+	val photoUrls: List<String>,
+
+	@field:SerializedName("visitDurationMinutes")
+	val visitDurationMinutes: Int,
+
+	@field:SerializedName("city")
+	val city: String,
+
 	@field:SerializedName("averageRating")
-	val averageRating: String,
+	val averageRating: Float,
 
 	@field:SerializedName("name")
 	val name: String,
@@ -27,14 +65,11 @@ data class SearchDestinationDataItem(
 	val description: String,
 
 	@field:SerializedName("lon")
-	val lon: String,
+	val lon: Double,
 
 	@field:SerializedName("id")
 	val id: Int,
 
-	@field:SerializedName("cityId")
-	val cityId: Int,
-
 	@field:SerializedName("lat")
-	val lat: String
+	val lat: Double
 ) : Parcelable

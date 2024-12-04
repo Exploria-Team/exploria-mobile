@@ -140,21 +140,7 @@ fun HomeScreen(navController: NavController) {
                                     .height(maxHeight)
                             ) {
                                 DestinationsListComponent(
-                                    navController,
-
-                                    recomendations = listOf(
-                                        R.drawable.img,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2
-                                    ),
+                                    navController = navController,
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(horizontal = 16.dp)

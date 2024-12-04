@@ -10,6 +10,44 @@ data class SearchTourGuideResponse(
 	@field:SerializedName("status_code")
 	val statusCode: Int,
 
-	@field:SerializedName("message")
-	val message: String
+	@field:SerializedName("data")
+	val data: List<SearchTourGuideData>
+) : Parcelable
+
+@Parcelize
+data class SearchTourGuideCategory(
+
+	@field:SerializedName("name")
+	val name: String,
+
+	@field:SerializedName("id")
+	val id: Int,
+
+	@field:SerializedName("group")
+	val group: String
+) : Parcelable
+
+@Parcelize
+data class SearchTourGuideData(
+
+	@field:SerializedName("price")
+	val price: Int,
+
+	@field:SerializedName("name")
+	val name: String,
+
+	@field:SerializedName("verified")
+	val verified: Boolean,
+
+	@field:SerializedName("bio")
+	val bio: String,
+
+	@field:SerializedName("location")
+	val location: String,
+
+	@field:SerializedName("id")
+	val id: String,
+
+	@field:SerializedName("category")
+	val category: SearchTourGuideCategory
 ) : Parcelable

@@ -2,7 +2,10 @@ package com.app.exploria.data.repositories
 
 import com.app.exploria.data.remote.api.ApiService
 import com.app.exploria.data.remote.request.FavoriteRequest
-import com.app.exploria.data.remote.response.DataItem
+import com.app.exploria.data.remote.request.PreferencesRequest
+import com.app.exploria.data.remote.response.GetAllUserFavoriteDataItem
+import com.app.exploria.data.remote.response.GetPreferenceDataItem
+import com.app.exploria.data.remote.response.PreferenceResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,13 +23,39 @@ class UserFavoriteRepository @Inject constructor(
         }
     }
 
-    suspend fun getAllFavorites(): Result<List<DataItem>> {
+    suspend fun getAllFavorites(): Result<List<GetAllUserFavoriteDataItem>> {
         return try {
             val response = apiService.getAllUserFavorite()
             if (response.statusCode == 200) {
                 Result.success(response.data ?: emptyList())
             } else {
                 Result.failure(Exception("Error fetching favorites: ${response.statusCode}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun postPreference(destinationId: Int): Result<PreferenceResponse> {
+        return try {
+            val response = apiService.preference(PreferencesRequest(preferences = listOf(destinationId)))
+            if (response.statusCode == 200) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception("Error post preference: ${response.statusCode}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getPreference() : Result<List<GetPreferenceDataItem>> {
+        return try {
+            val response = apiService.getPreferences()
+            if (response.statusCode == 200) {
+                Result.success(response.data)
+            } else {
+                Result.failure(Exception("Error post preference: ${response.statusCode}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

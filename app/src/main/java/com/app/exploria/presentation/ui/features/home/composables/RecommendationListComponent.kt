@@ -28,7 +28,7 @@ fun RecomendationListComponent(navController: NavController, recomendations: Lis
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(recomendations) { recomendation ->
-                ItemList(navController, image = recomendation)
+                ItemList(navController)
             }
         }
     }

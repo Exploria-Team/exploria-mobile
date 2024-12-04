@@ -35,7 +35,7 @@ fun EmptyView(message: String) {
         ) {
             LottieAnimation(
                 composition,
-                modifier = Modifier.size(350.dp),
+                modifier = Modifier.size(200.dp),
                 restartOnPlay = true,
                 alignment = Alignment.Center,
                 iterations = 100,

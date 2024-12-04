@@ -23,7 +23,9 @@ fun Toolbar(navController: NavController) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconButton(onClick = { navController.popBackStack() }) {
+        IconButton(onClick =
+        { navController.popBackStack() })
+        {
             CustomButtonNavigation(
                 icon = Icons.AutoMirrored.Filled.ArrowBack,
             )
