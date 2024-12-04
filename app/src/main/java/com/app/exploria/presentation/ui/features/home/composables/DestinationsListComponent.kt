@@ -7,24 +7,36 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.exploria.presentation.ui.features.common.ItemList
+import com.app.exploria.presentation.viewModel.DestinationViewModel
 
 @Composable
-fun DestinationsListComponent(navController : NavController,recomendations: List<Int>, modifier: Modifier = Modifier) {
+fun DestinationsListComponent(
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    val destinationViewModel: DestinationViewModel = hiltViewModel()
+    val destinations = destinationViewModel.destinations.collectAsLazyPagingItems()
+
+    LaunchedEffect(Unit) {
+        destinationViewModel.fetchDestinations()
+    }
+
     Column {
         Text(
             text = "Tempat mungkin kamu suka",
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
         )
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -32,9 +44,8 @@ fun DestinationsListComponent(navController : NavController,recomendations: List
             contentPadding = PaddingValues(vertical = 8.dp),
             modifier = modifier.fillMaxWidth()
         ) {
-            items(recomendations) { recomendation ->
-                ItemList(navController, image = recomendation)
-
+            items(destinations.itemCount) { item ->
+                ItemList(navController, destination = destinations[item])
             }
         }
     }

@@ -1,11 +1,17 @@
 package com.app.exploria.data.repositories
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.app.exploria.data.remote.api.ApiService
+import com.app.exploria.data.remote.response.AllDestinationsItem
 import com.app.exploria.data.remote.response.GetDestinationByIdResponse
 import com.app.exploria.data.remote.response.SearchDestinationDataItem
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import androidx.paging.PagingData
+import com.app.exploria.data.remote.pagingSource.DestinationPagingSource
 
 @Singleton
 class DestinationRepository @Inject constructor(@Named("ApiServiceWithToken") private val apiService: ApiService) {
@@ -24,12 +30,24 @@ class DestinationRepository @Inject constructor(@Named("ApiServiceWithToken") pr
         }
     }
 
+    fun getDestinations(pageSize: Int = 4): Flow<PagingData<AllDestinationsItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = pageSize,
+                enablePlaceholders = true,
+                maxSize = 200
+            ),
+            pagingSourceFactory = { DestinationPagingSource(apiService, pageSize) }
+        ).flow
+    }
+
 
     suspend fun searchDestinations(search: String): Result<List<SearchDestinationDataItem>> {
         return try {
             val response = apiService.searchDestination(search)
-            if (response.statusCode == 200 && !response.data.isNullOrEmpty()) {
-                Result.success(response.data)
+
+            if (response.statusCode == 200 && response.data.destinations.isNotEmpty()) {
+                Result.success(response.data.destinations)
             } else {
                 Result.failure(Exception("No destinations found"))
             }
@@ -37,5 +55,6 @@ class DestinationRepository @Inject constructor(@Named("ApiServiceWithToken") pr
             Result.failure(Exception("Error searching destinations: ${e.message}"))
         }
     }
+
 
 }
