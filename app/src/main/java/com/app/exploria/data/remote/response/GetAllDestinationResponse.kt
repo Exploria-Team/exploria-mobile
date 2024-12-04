@@ -5,43 +5,17 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 @Parcelize
-data class SearchDestinationResponse(
+data class GetAllDestinationResponse(
 
 	@field:SerializedName("status_code")
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: SearchDestinationData
+	val data: GetAllDestinationData
 ) : Parcelable
 
 @Parcelize
-data class Pagination(
-
-	@field:SerializedName("totalItems")
-	val totalItems: Int,
-
-	@field:SerializedName("totalPages")
-	val totalPages: Int,
-
-	@field:SerializedName("pageSize")
-	val pageSize: Int,
-
-	@field:SerializedName("currentPage")
-	val currentPage: Int
-) : Parcelable
-
-@Parcelize
-data class SearchDestinationData(
-
-	@field:SerializedName("pagination")
-	val pagination: Pagination,
-
-	@field:SerializedName("destinations")
-	val destinations: List<SearchDestinationDataItem>
-) : Parcelable
-
-@Parcelize
-data class SearchDestinationDataItem(
+data class AllDestinationsItem(
 
 	@field:SerializedName("entryFee")
 	val entryFee: Int,
@@ -72,4 +46,30 @@ data class SearchDestinationDataItem(
 
 	@field:SerializedName("lat")
 	val lat: Double
+) : Parcelable
+
+@Parcelize
+data class GetAllDestinationData(
+
+	@field:SerializedName("pagination")
+	val pagination: AllPagination,
+
+	@field:SerializedName("destinations")
+	val destinations: List<AllDestinationsItem>
+) : Parcelable
+
+@Parcelize
+data class AllPagination(
+
+	@field:SerializedName("totalItems")
+	val totalItems: Int,
+
+	@field:SerializedName("totalPages")
+	val totalPages: Int,
+
+	@field:SerializedName("pageSize")
+	val pageSize: Int,
+
+	@field:SerializedName("currentPage")
+	val currentPage: Int
 ) : Parcelable
