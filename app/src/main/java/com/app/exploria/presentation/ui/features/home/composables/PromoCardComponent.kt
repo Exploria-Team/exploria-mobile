@@ -35,7 +35,7 @@ fun PromoCardComponent(navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .clickable {navController.navigate(Screen.Plan.route)}
+            .clickable {navController.navigate(Screen.Survey.route)}
     ) {
         Row(
             modifier = Modifier
@@ -46,14 +46,14 @@ fun PromoCardComponent(navController: NavController) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Pilih Destinasi dan Buat",
+                    text = "Buat preferensi mu ",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "Itinerary Sekarang",
+                    text = "menggunakan AI kami",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,

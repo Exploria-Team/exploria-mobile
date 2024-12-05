@@ -32,7 +32,7 @@ fun BodyDetailComponent(navController: NavController, destinationData: GetDestin
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(MaterialTheme.colorScheme.surface),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         item {
             Text(

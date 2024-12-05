@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.app.exploria.presentation.ui.features.detail.composables.DetailScreen
 import com.app.exploria.presentation.ui.features.favorite.composables.FavoriteScreen
+import com.app.exploria.presentation.ui.features.guider.composables.GuideListScreen
+import com.app.exploria.presentation.ui.features.guider.composables.GuiderDetailScreen
 import com.app.exploria.presentation.ui.features.home.composables.HomeScreen
 import com.app.exploria.presentation.ui.features.planning.composables.FinalPlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.PlanningScreen
@@ -66,6 +68,14 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             val detailId = navBackStackEntry.arguments?.getString("id")
             DetailScreen(detailId, navController)
         }
+        composable(
+            route = Screen.DetailGuide.route,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val detailId = navBackStackEntry.arguments?.getString("id")
+            GuiderDetailScreen(detailId, navController)
+        }
         composable(Screen.Search.route) { SearchScreen(navController) }
+        composable(Screen.Guide.route) { GuideListScreen(navController) }
     }
 }

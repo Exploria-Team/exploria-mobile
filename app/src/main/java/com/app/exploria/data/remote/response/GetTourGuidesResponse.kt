@@ -11,11 +11,43 @@ data class GetTourGuidesResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: List<GetTourGuidesData>
+	val data: GetTourGuidesData
+) : Parcelable
+
+@Parcelize
+data class GetTourGuidesPagination(
+
+	@field:SerializedName("totalItems")
+	val totalItems: Int,
+
+	@field:SerializedName("totalPages")
+	val totalPages: Int,
+
+	@field:SerializedName("pageSize")
+	val pageSize: Int,
+
+	@field:SerializedName("currentPage")
+	val currentPage: Int
 ) : Parcelable
 
 @Parcelize
 data class GetTourGuidesData(
+
+	@field:SerializedName("tourGuides")
+	val tourGuides: List<TourGuidesItem>,
+
+	@field:SerializedName("pagination")
+	val pagination: GetTourGuidesPagination
+) : Parcelable
+
+@Parcelize
+data class TourGuidesItem(
+
+	@field:SerializedName("gender")
+	val gender: String,
+
+	@field:SerializedName("waNumber")
+	val waNumber: String,
 
 	@field:SerializedName("price")
 	val price: Int,
@@ -36,18 +68,11 @@ data class GetTourGuidesData(
 	val id: String,
 
 	@field:SerializedName("category")
-	val category: Category
-) : Parcelable
+	val category: String,
 
-@Parcelize
-data class Category(
+	@field:SerializedName("email")
+	val email: String,
 
-	@field:SerializedName("name")
-	val name: String,
-
-	@field:SerializedName("id")
-	val id: Int,
-
-	@field:SerializedName("group")
-	val group: String
+	@field:SerializedName("categoryGroup")
+	val categoryGroup: String
 ) : Parcelable

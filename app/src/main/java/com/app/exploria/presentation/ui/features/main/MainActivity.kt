@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.exploria.presentation.ui.navigation.AppNavigation
 import com.app.exploria.presentation.viewModel.MainViewModel
-import com.example.compose.AppTheme
+import com.app.exploria.presentation.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
