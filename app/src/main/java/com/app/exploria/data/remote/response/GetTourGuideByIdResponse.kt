@@ -17,6 +17,9 @@ data class GetTourGuideByIdResponse(
 @Parcelize
 data class GetTourGuideByIdData(
 
+	@field:SerializedName("gender")
+	val gender: String,
+
 	@field:SerializedName("waNumber")
 	val waNumber: String,
 
@@ -39,18 +42,11 @@ data class GetTourGuideByIdData(
 	val id: String,
 
 	@field:SerializedName("category")
-	val category: GetTourGuideByIdCategory
-) : Parcelable
+	val category: String,
 
-@Parcelize
-data class GetTourGuideByIdCategory(
+	@field:SerializedName("email")
+	val email: String,
 
-	@field:SerializedName("name")
-	val name: String,
-
-	@field:SerializedName("id")
-	val id: Int,
-
-	@field:SerializedName("group")
-	val group: String
+	@field:SerializedName("categoryGroup")
+	val categoryGroup: String
 ) : Parcelable
