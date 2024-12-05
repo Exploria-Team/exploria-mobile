@@ -25,7 +25,7 @@ import com.app.exploria.presentation.ui.features.common.NavigationBottom
 import com.app.exploria.presentation.ui.features.planning.common.AddDestinationButton
 import com.app.exploria.presentation.ui.features.planning.common.PlanCard
 import com.app.exploria.presentation.ui.navigation.Screen
-import com.example.compose.AppTheme
+import com.app.exploria.presentation.ui.theme.AppTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
