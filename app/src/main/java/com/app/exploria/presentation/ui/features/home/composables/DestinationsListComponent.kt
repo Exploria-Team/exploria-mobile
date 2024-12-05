@@ -10,27 +10,19 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
+import com.app.exploria.data.remote.response.AllDestinationsItem
 import com.app.exploria.presentation.ui.features.common.ItemList
-import com.app.exploria.presentation.viewModel.DestinationViewModel
 
 @Composable
 fun DestinationsListComponent(
     navController: NavController,
-    modifier: Modifier = Modifier
-) {
-    val destinationViewModel: DestinationViewModel = hiltViewModel()
-    val destinations = destinationViewModel.destinations.collectAsLazyPagingItems()
-
-    LaunchedEffect(Unit) {
-        destinationViewModel.fetchDestinations()
-    }
-
+    modifier: Modifier = Modifier,
+    destination: LazyPagingItems<AllDestinationsItem>,
+    ) {
     Column {
         Text(
             text = "Tempat mungkin kamu suka",
@@ -44,8 +36,8 @@ fun DestinationsListComponent(
             contentPadding = PaddingValues(vertical = 8.dp),
             modifier = modifier.fillMaxWidth()
         ) {
-            items(destinations.itemCount) { item ->
-                ItemList(navController, destination = destinations[item])
+            items(destination.itemCount) { item ->
+                ItemList(navController, destination = destination[item])
             }
         }
     }
