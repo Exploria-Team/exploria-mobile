@@ -22,8 +22,10 @@ import com.app.exploria.presentation.ui.features.planning.composables.SelectDest
 import com.app.exploria.presentation.ui.features.profile.composables.ProfileScreen
 import com.app.exploria.presentation.ui.features.register.composables.RegisterScreen
 import com.app.exploria.presentation.ui.features.search.composables.SearchScreen
+import com.app.exploria.presentation.ui.features.splash.composables.SplashScreen
 import com.app.exploria.presentation.ui.features.survey.composables.SurveyScreen
 import com.app.exploria.presentation.viewModel.MainViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavigation(mainViewModel: MainViewModel) {
@@ -36,8 +38,19 @@ fun AppNavigation(mainViewModel: MainViewModel) {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Splash.route,
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen()
+            LaunchedEffect(Unit) {
+                delay(2000)
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Splash.route) {inclusive = true}
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        }
         composable(Screen.Home.route) { HomeScreen(navController, userState) }
         composable(Screen.Plan.route) { PlanningScreen(navController) }
         composable(Screen.Favorite.route) { FavoriteScreen(navController) }
