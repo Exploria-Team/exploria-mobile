@@ -47,7 +47,7 @@ fun GuideItemList(navController: NavController, guideData: TourGuidesItem) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(R.drawable.avatar13),
+                painter = painterResource(R.drawable.profiledefault),
                 contentDescription = guideData.name,
                 modifier = Modifier.size(70.dp)
             )

@@ -151,7 +151,7 @@ fun ProfileSection(tourGuide: GetTourGuideByIdData) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img),
+            painter = painterResource(id = R.drawable.profiledefault),
             contentDescription = "Profile Picture",
             modifier = Modifier
                 .padding(bottom = 8.dp)
