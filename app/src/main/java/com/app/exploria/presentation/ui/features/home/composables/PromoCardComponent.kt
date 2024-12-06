@@ -36,7 +36,7 @@ fun PromoCardComponent(navController: NavController) {
             .fillMaxWidth()
             .padding(16.dp)
             .clickable {
-                navController.navigate(Screen.Profile.route) {
+                navController.navigate(Screen.Login.route) {
                     launchSingleTop = true
                 }
             }

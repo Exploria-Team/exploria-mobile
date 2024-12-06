@@ -79,7 +79,7 @@ fun HeaderComponent(navController: NavController, user: UserModel?) {
         )
 
         Image(
-            painter = painterResource(id = R.drawable.avatar13),
+            painter = painterResource(id = R.drawable.profiledefault),
             contentDescription = "Foto Profil",
             contentScale = ContentScale.Crop,
             modifier = Modifier
