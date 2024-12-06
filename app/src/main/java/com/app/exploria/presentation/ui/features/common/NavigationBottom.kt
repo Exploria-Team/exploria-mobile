@@ -12,16 +12,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.app.exploria.R
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.navigation.Screen
 
 @Composable
-fun NavigationBottom(navController: NavController) {
+fun NavigationBottom(navController: NavController, user: UserModel? = null) {
     val items = listOf(
         Screen.Home,
         Screen.Plan,
         Screen.Favorite,
         Screen.Guide
     )
+
     NavigationBar {
         items.forEach { screen ->
             NavigationBarItem(
@@ -35,10 +37,8 @@ fun NavigationBottom(navController: NavController) {
                         )
                         is Screen.Guide -> Icon(
                             painter = painterResource(id = R.drawable.explore),
-                             contentDescription = "Guide"
-                        )
-
-                        else -> {}
+                            contentDescription = "Guide"
+                        ) else -> {}
                     }
                 },
                 label = {
@@ -52,17 +52,31 @@ fun NavigationBottom(navController: NavController) {
                 },
                 selected = navController.currentDestination?.route == screen.route,
                 onClick = {
-                    navController.navigate(screen.route) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
+                    if (screen == Screen.Plan || screen == Screen.Favorite) {
+                        if (user?.isLogin == true) {
+                            navController.navigate(screen.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        } else {
+                            navController.navigate(Screen.Login.route) {
+                                launchSingleTop = true
+                            }
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                    } else {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 }
             )
         }
     }
 }
-
-

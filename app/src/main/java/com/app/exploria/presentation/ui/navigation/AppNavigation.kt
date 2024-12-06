@@ -34,24 +34,11 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         mainViewModel.loadUser()
     }
 
-    LaunchedEffect(userState) {
-        if (userState?.isLogin == true) {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
-            }
-        } else {
-            navController.navigate(Screen.Login.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
-            }
-        }
-    }
-
     NavHost(
         navController = navController,
-        startDestination = if (userState?.isLogin == true) Screen.Home.route else Screen.Login.route,
+        startDestination = Screen.Home.route,
     ) {
-
-        composable(Screen.Home.route) { HomeScreen(navController) }
+        composable(Screen.Home.route) { HomeScreen(navController, userState) }
         composable(Screen.Plan.route) { PlanningScreen(navController) }
         composable(Screen.Favorite.route) { FavoriteScreen(navController) }
         composable(Screen.Login.route) { LoginScreen(navController, mainViewModel) }

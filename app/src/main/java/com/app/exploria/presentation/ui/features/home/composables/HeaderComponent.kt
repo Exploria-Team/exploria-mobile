@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,11 +28,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.exploria.R
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.navigation.Screen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderComponent(navController: NavController) {
+fun HeaderComponent(navController: NavController, user: UserModel?) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -85,7 +84,15 @@ fun HeaderComponent(navController: NavController) {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(40.dp)
-                .clickable { navController.navigate(Screen.Profile.route) }
+                .clickable {
+                    if (user?.isLogin == true) {
+                        navController.navigate(Screen.Profile.route) {
+                            launchSingleTop = true
+                        }
+                    } else {
+                        navController.navigate(Screen.Login.route)
+                    }
+                }
         )
     }
 }

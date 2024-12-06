@@ -3,7 +3,15 @@ package com.app.exploria.presentation.ui.features.home.composables
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,28 +32,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.exploria.R
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.features.common.NavigationBottom
-import com.app.exploria.presentation.ui.components.EmptyView
-import com.app.exploria.presentation.viewModel.DestinationViewModel
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, user: UserModel?) {
     val context = LocalContext.current
     val activity = context as? Activity
     var showExitDialog by remember { mutableStateOf(false) }
-
-    val destinationViewModel: DestinationViewModel = hiltViewModel()
-    val destinations = destinationViewModel.destinations.collectAsLazyPagingItems()
-    val loading = destinationViewModel.isLoading.collectAsState()
-    val error = destinationViewModel.errorMessage.collectAsState()
-
-    LaunchedEffect(Unit) {
-        destinationViewModel.fetchDestinations()
-    }
 
     BackHandler {
         showExitDialog = true
@@ -55,11 +50,11 @@ fun HomeScreen(navController: NavController) {
     Scaffold(
         topBar = {
             Box(modifier = Modifier.padding(top = 16.dp)) {
-                HeaderComponent(navController = navController)
+                HeaderComponent(navController = navController, user = user)
             }
         },
         bottomBar = {
-            NavigationBottom(navController = navController)
+            NavigationBottom(navController = navController, user = user)
         }
     ) { innerPadding: PaddingValues ->
         Box(
@@ -80,82 +75,76 @@ fun HomeScreen(navController: NavController) {
                     val listState = rememberLazyListState()
                     val isDestinationListVisible = remember { mutableStateOf(false) }
 
-                    when {
-                        loading.value == true -> {
-                            EmptyView("Tunggu Sebentar")
-                        }
 
-                        error.value != null -> {
-                            EmptyView(error.value ?: "Terjadi kesalahan", isError = true)
-                        }
-
-                        else -> {
-                            LazyColumn(
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        state = listState
+                    ) {
+                        item {
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(16.dp),
-                                state = listState
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(
+                                            bottomStart = 50.dp,
+                                            bottomEnd = 50.dp
+                                        )
+                                    )
+                                    .background(color = MaterialTheme.colorScheme.primary)
                             ) {
-                                item {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clip(
-                                                RoundedCornerShape(
-                                                    bottomStart = 50.dp,
-                                                    bottomEnd = 50.dp
-                                                )
-                                            )
-                                            .background(color = MaterialTheme.colorScheme.primary)
-                                    ) {
-                                        Column(modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp)) {
-                                            BorderComponent(
-                                                images = listOf(
-                                                    R.drawable.img2,
-                                                    R.drawable.img2,
-                                                    R.drawable.img2
-                                                )
-                                            )
-                                            PromoCardComponent(navController)
-                                        }
-                                    }
-                                }
-
-                                item {
-                                    RecomendationListComponent(
-                                        navController,
-                                        recomendations = listOf(
-                                            R.drawable.img,
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+                                    BorderComponent(
+                                        images = listOf(
                                             R.drawable.img2,
                                             R.drawable.img2,
                                             R.drawable.img2
-                                        ),
-                                        modifier = Modifier.padding(horizontal = 16.dp)
-                                    )
-                                }
-
-                                item {
-                                    LaunchedEffect(remember { derivedStateOf { listState.firstVisibleItemIndex } }) {
-                                        isDestinationListVisible.value =
-                                            listState.firstVisibleItemIndex >= 2
-                                    }
-
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(maxHeight)
-                                    ) {
-                                        DestinationsListComponent(
-                                            navController = navController,
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .padding(horizontal = 16.dp),
-                                            destination = destinations
                                         )
+                                    )
+                                    if (user?.isLogin == false) {
+                                        PromoCardComponent(navController)
                                     }
                                 }
+                            }
+                        }
+
+                        if (user?.isLogin == true) {
+                            item {
+                                RecomendationListComponent(
+                                    navController,
+                                    recomendations = listOf(
+                                        R.drawable.img,
+                                        R.drawable.img2,
+                                        R.drawable.img2,
+                                        R.drawable.img2
+                                    ),
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                )
+                            }
+                        }
+
+                        item {
+                            LaunchedEffect(remember { derivedStateOf { listState.firstVisibleItemIndex } }) {
+                                isDestinationListVisible.value =
+                                    listState.firstVisibleItemIndex >= 2
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(maxHeight)
+                            ) {
+                                DestinationsListComponent(
+                                    navController = navController,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(horizontal = 16.dp),
+                                )
                             }
                         }
                     }
@@ -163,6 +152,7 @@ fun HomeScreen(navController: NavController) {
             }
         }
     }
+
 
     if (showExitDialog) {
         AlertDialog(

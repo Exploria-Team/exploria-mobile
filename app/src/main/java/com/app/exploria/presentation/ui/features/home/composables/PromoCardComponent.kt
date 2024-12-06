@@ -35,7 +35,11 @@ fun PromoCardComponent(navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-            .clickable {navController.navigate(Screen.Survey.route)}
+            .clickable {
+                navController.navigate(Screen.Profile.route) {
+                    launchSingleTop = true
+                }
+            }
     ) {
         Row(
             modifier = Modifier
