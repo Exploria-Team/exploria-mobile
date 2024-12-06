@@ -35,30 +35,4 @@ class UserFavoriteRepository @Inject constructor(
             Result.failure(e)
         }
     }
-
-    suspend fun postPreference(destinationId: Int): Result<PreferenceResponse> {
-        return try {
-            val response = apiService.preference(PreferencesRequest(preferences = listOf(destinationId)))
-            if (response.statusCode == 200) {
-                Result.success(response)
-            } else {
-                Result.failure(Exception("Error post preference: ${response.statusCode}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun getPreference() : Result<List<GetPreferenceDataItem>> {
-        return try {
-            val response = apiService.getPreferences()
-            if (response.statusCode == 200) {
-                Result.success(response.data)
-            } else {
-                Result.failure(Exception("Error post preference: ${response.statusCode}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 }
