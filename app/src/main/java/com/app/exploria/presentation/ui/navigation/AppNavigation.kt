@@ -19,6 +19,7 @@ import com.app.exploria.presentation.ui.features.planning.composables.FinalPlann
 import com.app.exploria.presentation.ui.features.planning.composables.PlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.SecondPlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.SelectDestinationScreen
+import com.app.exploria.presentation.ui.features.profile.composables.ProfileForm
 import com.app.exploria.presentation.ui.features.profile.composables.ProfileScreen
 import com.app.exploria.presentation.ui.features.register.composables.RegisterScreen
 import com.app.exploria.presentation.ui.features.search.composables.SearchScreen
@@ -77,5 +78,6 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         }
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.Guide.route) { GuideListScreen(navController) }
+        composable(Screen.ProfileForm.route) { ProfileForm(navController, mainViewModel) }
     }
 }

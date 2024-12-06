@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +28,7 @@ import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
 import com.app.exploria.presentation.ui.navigation.Screen
 import com.app.exploria.presentation.viewModel.MainViewModel
 import com.app.exploria.presentation.viewModel.ProfileViewModel
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun ProfileScreen(
@@ -34,22 +36,11 @@ fun ProfileScreen(
 ) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
     val userData by profileViewModel.userData.collectAsState()
-    val isLoading by profileViewModel.isLoading.collectAsState()
-    val errorMessage by profileViewModel.errorMessage.collectAsState()
     val user by mainViewModel.user.collectAsState()
-    val userModel by mainViewModel.userModel.collectAsState()
 
     LaunchedEffect(user) {
         user?.let {
-            println("Fetching user data for ID: ${it.id}")
             profileViewModel.getDataUser(it.id)
-        } ?: run {
-            println("User data is null")
-        }
-        userModel?.let {
-            println("Fetching user data for ID: ${it.token}")
-        } ?: run {
-            println("User data is null")
         }
     }
 
@@ -72,20 +63,32 @@ fun ProfileScreen(
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profile Picture and Name
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img),
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier
-                        .padding(bottom = 8.dp)
-                        .size(130.dp)
-                        .clip(CircleShape)
-                )
-
+                if (user?.profilePictureUrl.isNullOrEmpty()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.profiledefault),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .size(130.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    user?.let {
+                        GlideImage(
+                            imageModel = it.profilePictureUrl,
+                            contentDescription = user!!.name,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp)
+                                .size(130.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+                }
                 userData?.name?.let {
                     Text(
                         text = it,
@@ -93,23 +96,24 @@ fun ProfileScreen(
                         modifier = Modifier.padding(bottom = 32.dp)
                     )
                 }
+
+                SettingsListItem(title = "Ubah Profile", icon = R.drawable.create, onClick = {
+                    navController.navigate(Screen.ProfileForm.route)
+                })
+
+                SettingsListItem(title = "FAQ", icon = R.drawable.faq)
+
+                SettingsListItem(title = "Bantuan", icon = R.drawable.help)
+
+                SettingsListItem(title = "Keluar", icon = R.drawable.logout, onClick = {
+                    mainViewModel.logout()
+
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Profile.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                })
             }
-
-            SettingsListItem(title = "Ubah Profile")
-
-            SettingsListItem(title = "FAQ")
-
-            SettingsListItem(title = "Bantuan")
-
-            SettingsListItem(title = "Keluar", onClick = {
-                mainViewModel.logout()
-
-                navController.navigate(Screen.Login.route) {
-                    popUpTo(Screen.Profile.route) { inclusive = true }
-                    launchSingleTop = true
-                }
-            })
-
         }
     }
 }
