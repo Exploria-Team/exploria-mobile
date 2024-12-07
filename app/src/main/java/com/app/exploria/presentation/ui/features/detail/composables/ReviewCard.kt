@@ -39,7 +39,7 @@ fun ReviewCard(review: ReviewsItem) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(R.drawable.avatar13),
+                    painter = painterResource(R.drawable.profiledefault),
                     contentDescription = "Reviewer Image",
                     modifier = Modifier
                         .size(48.dp)

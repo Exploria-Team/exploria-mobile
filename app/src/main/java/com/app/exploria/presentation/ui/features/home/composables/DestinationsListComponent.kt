@@ -42,7 +42,7 @@ fun DestinationsListComponent(
         Text(
             text = "Tempat mungkin kamu suka",
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         )
         if (loading.value) {
             Box(
@@ -72,7 +72,13 @@ fun DestinationsListComponent(
             ) {
                 items(destinations.itemCount) { index ->
                     destinations[index]?.let { destination ->
-                        ItemList(navController, destination = destination)
+                        ItemList(
+                            navController = navController,
+                            destination = destination,
+                            getId = { it?.id },
+                            getName = { it?.name },
+                            getPhotoUrls = { it?.photoUrls }
+                        )
                     }
                 }
             }
