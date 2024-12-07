@@ -8,6 +8,7 @@ import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.RegisterRequest
 import com.app.exploria.data.remote.request.ReviewRequest
 import com.app.exploria.data.remote.request.UserDataRequest
+import com.app.exploria.data.remote.response.DistanceModelResponse
 import com.app.exploria.data.remote.response.GetAllDestinationResponse
 import com.app.exploria.data.remote.response.GetAllUserFavoriteResponse
 import com.app.exploria.data.remote.response.GetDestinationByIdResponse
@@ -18,6 +19,7 @@ import com.app.exploria.data.remote.response.GetReviewResponse
 import com.app.exploria.data.remote.response.GetTourGuideByIdResponse
 import com.app.exploria.data.remote.response.GetTourGuidesResponse
 import com.app.exploria.data.remote.response.LoginResponse
+import com.app.exploria.data.remote.response.NormalModelResponse
 import com.app.exploria.data.remote.response.PostFavoriteResponse
 import com.app.exploria.data.remote.response.PostPlanDestinationResponse
 import com.app.exploria.data.remote.response.PostPlanResponse
@@ -38,7 +40,7 @@ import retrofit2.http.Query
 interface ApiService {
     // Auth
     @POST("auth/signup")
-    suspend fun register(@Body registerRequest: RegisterRequest) : RegisterResponse
+    suspend fun register(@Body registerRequest: RegisterRequest): RegisterResponse
 
     @POST("auth/login")
     suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
@@ -47,18 +49,18 @@ interface ApiService {
     @GET("user/{id}")
     suspend fun getUserData(
         @Path("id") id: Int
-    ) : UserDataResponse
+    ): UserDataResponse
 
     @PUT("user/{id}")
     suspend fun updateUser(
         @Path("id") id: Int,
         @Body userDataRequest: UserDataRequest
-    ) : UserDataResponse
+    ): UserDataResponse
 
     @POST("user/favorite")
     suspend fun favoriteUser(
         @Body favoriteRequest: FavoriteRequest
-    ) : PostFavoriteResponse
+    ): PostFavoriteResponse
 
     @GET("user/favorite")
     suspend fun getAllUserFavorite(): GetAllUserFavoriteResponse
@@ -66,36 +68,36 @@ interface ApiService {
     @POST("user/preference")
     suspend fun preference(
         @Body preferencesRequest: PreferencesRequest
-    ) : PreferenceResponse
+    ): PreferenceResponse
 
     @GET("user/preference")
-    suspend fun getPreferences() : GetPreferenceResponse
+    suspend fun getPreferences(): GetPreferenceResponse
 
     // Destination
     @GET("destination")
     suspend fun getAllDestinations(
-        @Query("page") page : Int,
-        @Query("size") size : Int,
-    ) : GetAllDestinationResponse
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): GetAllDestinationResponse
 
     @GET("destination/{id}")
-    suspend fun getDestination(@Path("id") id: Int) : GetDestinationByIdResponse
+    suspend fun getDestination(@Path("id") id: Int): GetDestinationByIdResponse
 
     @GET("destination/")
-    suspend fun searchDestination(@Query("search") search : String) : SearchDestinationResponse
+    suspend fun searchDestination(@Query("search") search: String): SearchDestinationResponse
 
     // Review
     @GET("review/destination/{id}")
     suspend fun getReviews(
         @Path("id") id: Int,
-        @Query("page") page : Int,
-        @Query("size") size : Int,
-    ) : GetReviewResponse
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): GetReviewResponse
 
     @POST("review")
     suspend fun submitReview(
         @Body reviewRequest: ReviewRequest
-    ) : PostReviewResponse
+    ): PostReviewResponse
 
     // Tour Guide
     @GET("tour-guides")
@@ -109,16 +111,28 @@ interface ApiService {
 
     // Travel Plan
     @GET("travel-plan")
-    suspend fun getPlans() : GetPlansResponse
+    suspend fun getPlans(): GetPlansResponse
 
     @POST("travel-plan")
-    suspend fun postPlan(@Body planRequest: PlanRequest) : PostPlanResponse
+    suspend fun postPlan(@Body planRequest: PlanRequest): PostPlanResponse
 
     @GET("travel-plan/destination/{id}")
-    suspend fun getPlanById(@Path("id") id: String) : GetPlanDestinationByIdResponse
+    suspend fun getPlanById(@Path("id") id: String): GetPlanDestinationByIdResponse
 
     @POST("travel-plan/destination")
     suspend fun uploadDestinationPlan(
         @Body planDestinationRequest: PlanDestinationRequest
-    ) : PostPlanDestinationResponse
+    ): PostPlanDestinationResponse
+
+    // Model
+    @GET("recommendation/normal-hybrid")
+    suspend fun getNormalModel(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ) : NormalModelResponse
+
+    @GET("recommendation/distance-hybrid/{id}")
+    suspend fun getDistanceModel(
+        @Path("id") id: Int,
+    ) : DistanceModelResponse
 }
