@@ -18,21 +18,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.app.exploria.data.remote.response.AllDestinationsItem
 import com.app.exploria.presentation.ui.navigation.Screen
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun ItemList(
+fun <T> ItemList(
     navController: NavController,
-    destination: AllDestinationsItem? = null,
-    modifier: Modifier = Modifier
+    destination: T?,
+    modifier: Modifier = Modifier,
+    getId: (T?) -> Int?,
+    getName: (T?) -> String?,
+    getPhotoUrls: (T?) -> List<String>?
 ) {
     Box(
         modifier = modifier
             .size(180.dp)
             .clickable {
-                val id = destination?.id
+                val id = getId(destination)
                 navController.navigate("detail/$id") {
                     launchSingleTop = true
                     popUpTo(Screen.Home.route) { inclusive = false }
@@ -40,18 +42,20 @@ fun ItemList(
             }
             .clip(RoundedCornerShape(16.dp))
     ) {
-        destination?.photoUrls?.let {
-            GlideImage(
-                imageModel = it[0],
-                contentDescription = destination.name,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+        getPhotoUrls(destination)?.let { photos ->
+            if (photos.isNotEmpty()) {
+                GlideImage(
+                    imageModel = photos[0],
+                    contentDescription = getName(destination),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
 
-        destination?.name?.let {
+        getName(destination)?.let { name ->
             Text(
-                text = it,
+                text = name,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 10.dp, bottom = 5.dp),
@@ -67,3 +71,4 @@ fun ItemList(
         )
     }
 }
+
