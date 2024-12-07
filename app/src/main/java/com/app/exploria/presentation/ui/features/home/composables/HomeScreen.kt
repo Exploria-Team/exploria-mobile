@@ -102,8 +102,8 @@ fun HomeScreen(navController: NavController, user: UserModel?) {
                                     BorderComponent(
                                         images = listOf(
                                             R.drawable.img2,
-                                            R.drawable.img2,
-                                            R.drawable.img2
+                                            R.drawable.img1,
+                                            R.drawable.img3
                                         )
                                     )
                                     if (user?.isLogin == false) {
@@ -117,12 +117,6 @@ fun HomeScreen(navController: NavController, user: UserModel?) {
                             item {
                                 RecomendationListComponent(
                                     navController,
-                                    recomendations = listOf(
-                                        R.drawable.img,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2
-                                    ),
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
                             }
