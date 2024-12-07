@@ -65,11 +65,11 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun postPreference(destinationId: Int) {
+    fun postPreferences(destinationId: List<Int>) {
         setLoading(true)
         viewModelScope.launch {
             try {
-                val result = profileRepository.postPreference(destinationId)
+                val result = profileRepository.postPreferences(destinationId)
 
                 _postPreferenceResult.value = result
             } catch (e: Exception) {

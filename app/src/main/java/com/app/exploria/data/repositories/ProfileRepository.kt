@@ -50,18 +50,19 @@ class ProfileRepository @Inject constructor(
         }
     }
 
-    suspend fun postPreference(destinationId: Int): Result<PreferenceResponse> {
+    suspend fun postPreferences(destinationIds: List<Int>): Result<PreferenceResponse> {
         return try {
-            val response = apiService.preference(PreferencesRequest(preferences = listOf(destinationId)))
+            val response = apiService.preference(PreferencesRequest(preferences = destinationIds))
             if (response.statusCode == 200) {
                 Result.success(response)
             } else {
-                Result.failure(Exception("Error post preference: ${response.statusCode}"))
+                Result.failure(Exception("Error posting preferences: ${response.statusCode}"))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
+
 
     suspend fun getPreference() : Result<List<GetPreferenceDataItem>> {
         return try {
