@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,9 +46,21 @@ fun RegisterScreen(navController: NavController, mainViewModel: MainViewModel) {
     val isLoading by mainViewModel.isLoading.collectAsState()
     val errorMessage by mainViewModel.errorMessage.collectAsState()
     val isRegistered by mainViewModel.isRegistered.collectAsState()
+    val userModel by mainViewModel.userModel.collectAsState()
 
-    if (isRegistered) {
-        handleSuccessfulRegistration(navController, mainViewModel)
+
+    LaunchedEffect(userModel) {
+        if (userModel != null && userModel!!.isLogin) {
+            navController.navigate(Screen.Survey.route) {
+                popUpTo(Screen.Register.route) { inclusive = true }
+            }
+        }
+    }
+
+    LaunchedEffect(isRegistered) {
+        if (isRegistered) {
+            mainViewModel.login(emailState.value.text, passwordState.value.text)
+        }
     }
 
     Box(
@@ -66,13 +79,6 @@ fun RegisterScreen(navController: NavController, mainViewModel: MainViewModel) {
             onLoginClick = { navController.navigate(Screen.Login.route) }
         )
     }
-}
-
-private fun handleSuccessfulRegistration(navController: NavController, mainViewModel: MainViewModel) {
-    navController.navigate(Screen.Login.route) {
-        popUpTo(Screen.Register.route) { inclusive = true }
-    }
-    mainViewModel.resetRegistrationState()
 }
 
 private fun handleRegisterClick(
