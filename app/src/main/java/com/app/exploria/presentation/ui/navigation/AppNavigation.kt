@@ -67,7 +67,7 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { navBackStackEntry ->
             val detailId = navBackStackEntry.arguments?.getString("id")
-            DetailScreen(detailId, navController)
+            DetailScreen(detailId, navController, userState)
         }
         composable(
             route = Screen.DetailGuide.route,

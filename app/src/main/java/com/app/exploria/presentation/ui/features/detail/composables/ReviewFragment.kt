@@ -14,11 +14,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.features.common.CustomButton
 import com.app.exploria.presentation.viewModel.ReviewViewModel
 
 @Composable
-fun ReviewFragment(navController: NavController, id: Int) {
+fun ReviewFragment(navController: NavController, id: Int, userModel: UserModel?) {
     val reviewViewModel: ReviewViewModel = hiltViewModel()
 
     val reviews = reviewViewModel.reviewData.collectAsLazyPagingItems()
@@ -38,22 +39,27 @@ fun ReviewFragment(navController: NavController, id: Int) {
             }
         }
 
-        item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Berikan ulasan anda",
-                    style = MaterialTheme.typography.titleLarge
-                )
-                CustomButton("review", width = 100, textStyle = MaterialTheme.typography.titleMedium)
+        if (userModel?.isLogin == true) {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Berikan ulasan anda",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    CustomButton(
+                        "review",
+                        width = 100,
+                        textStyle = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
         }
-
 
         items(reviews.itemCount) { item ->
             reviews[item]?.let {
