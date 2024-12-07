@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.app.exploria.data.remote.api.ApiService
 import com.app.exploria.data.remote.response.NormalModelDataItem
-import com.app.exploria.data.remote.response.NormalModelResponse
 import okio.IOException
 import retrofit2.HttpException
 
@@ -17,8 +16,8 @@ class NormalModelPagingSource(
         val page = params.key ?: 1
         return try {
             val response = apiService.getNormalModel(page, pageSize)
-            val data = response.data
-            val nextPage = response.pagination.let {
+            val data = response.data.orEmpty()
+            val nextPage = response.pagination?.let {
                 if (it.currentPage < it.totalPages) it.currentPage + 1 else null
             }
             LoadResult.Page(
@@ -41,3 +40,4 @@ class NormalModelPagingSource(
         }
     }
 }
+

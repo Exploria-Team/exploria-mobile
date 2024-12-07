@@ -9,17 +9,19 @@ import com.app.exploria.data.remote.response.DistanceModelDataItem
 import com.app.exploria.data.remote.response.NormalModelDataItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class ModelRepository @Inject constructor(private val apiService: ApiService) {
+class ModelRepository @Inject constructor(
+    @Named("ApiServiceWithToken") private val apiService: ApiService
+) {
 
     fun getNormalModel(pageSize: Int = 5): Flow<PagingData<NormalModelDataItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = pageSize,
                 enablePlaceholders = true,
-                maxSize = 10
             ),
             pagingSourceFactory = { NormalModelPagingSource(apiService, pageSize) }
         ).flow
