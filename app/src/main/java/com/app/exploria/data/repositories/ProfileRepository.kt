@@ -1,8 +1,11 @@
 package com.app.exploria.data.repositories
 
 import com.app.exploria.data.remote.api.ApiService
+import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.UserDataRequest
 import com.app.exploria.data.remote.response.Data
+import com.app.exploria.data.remote.response.GetPreferenceDataItem
+import com.app.exploria.data.remote.response.PreferenceResponse
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -41,6 +44,33 @@ class ProfileRepository @Inject constructor(
                 Result.success(response.data)
             } else {
                 Result.failure(Exception("Update failed with status code: ${response.statusCode}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun postPreferences(destinationIds: List<Int>): Result<PreferenceResponse> {
+        return try {
+            val response = apiService.preference(PreferencesRequest(preferences = destinationIds))
+            if (response.statusCode == 200) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception("Error posting preferences: ${response.statusCode}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    suspend fun getPreference() : Result<List<GetPreferenceDataItem>> {
+        return try {
+            val response = apiService.getPreferences()
+            if (response.statusCode == 200) {
+                Result.success(response.data)
+            } else {
+                Result.failure(Exception("Error post preference: ${response.statusCode}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

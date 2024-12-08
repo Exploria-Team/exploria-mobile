@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.exploria.R
 import com.app.exploria.data.remote.response.TourGuidesItem
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun GuideItemList(navController: NavController, guideData: TourGuidesItem) {
@@ -46,11 +48,21 @@ fun GuideItemList(navController: NavController, guideData: TourGuidesItem) {
 
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(R.drawable.avatar13),
-                contentDescription = guideData.name,
-                modifier = Modifier.size(70.dp)
-            )
+            if (guideData.photoUrl.isNotEmpty()) {
+                GlideImage(
+                    imageModel = guideData.photoUrl,
+                    contentDescription = guideData.name,
+                    modifier = Modifier
+                        .size(70.dp)
+                        .clip(shape = CircleShape)
+                )
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.profiledefault),
+                    contentDescription = guideData.name,
+                    modifier = Modifier.size(70.dp)
+                )
+            }
             Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.fillMaxWidth()

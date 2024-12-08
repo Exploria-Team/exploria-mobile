@@ -2,19 +2,18 @@ package com.app.exploria.data.repositories
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.app.exploria.data.remote.api.ApiService
+import com.app.exploria.data.remote.pagingSource.DestinationPagingSource
 import com.app.exploria.data.remote.response.AllDestinationsItem
 import com.app.exploria.data.remote.response.GetDestinationByIdResponse
 import com.app.exploria.data.remote.response.SearchDestinationDataItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
-import androidx.paging.PagingData
-import com.app.exploria.data.remote.pagingSource.DestinationPagingSource
 
 @Singleton
-class DestinationRepository @Inject constructor(@Named("ApiServiceWithToken") private val apiService: ApiService) {
+class DestinationRepository @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getDestinationById(id: Int): Result<GetDestinationByIdResponse> {
         return try {

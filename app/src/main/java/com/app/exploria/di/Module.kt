@@ -5,8 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import com.app.exploria.data.database.AppDatabase
-import com.app.exploria.data.database.dao.DestinationDao
+import com.app.exploria.data.database.CategoryDatabase
+import com.app.exploria.data.database.dao.CategoryDao
 import com.app.exploria.data.pref.UserPreference
 import com.app.exploria.data.remote.api.ApiConfig
 import com.app.exploria.data.remote.api.ApiService
@@ -26,21 +26,20 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 @Module
 @InstallIn(SingletonComponent::class)
 object Module {
-
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun provideAppDatabase(@ApplicationContext context: Context): CategoryDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
-            AppDatabase::class.java,
-            "app_database"
+            CategoryDatabase::class.java,
+            "category_database"
         ).build()
     }
 
     @Provides
     @Singleton
-    fun provideDestinationDao(appDatabase: AppDatabase): DestinationDao {
-        return appDatabase.destinationDao()
+    fun provideDestinationDao(appDatabase: CategoryDatabase): CategoryDao {
+        return appDatabase.categoryDao()
     }
 
     @Provides

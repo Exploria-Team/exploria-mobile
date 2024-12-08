@@ -1,7 +1,5 @@
 package com.app.exploria.presentation.ui.features.survey.composables
 
-import android.app.Activity
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,40 +23,43 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
 import com.app.exploria.presentation.ui.navigation.Screen
-import com.example.compose.AppTheme
+import com.app.exploria.presentation.viewModel.CategoryViewModel
+import com.app.exploria.presentation.viewModel.ProfileViewModel
 
 @Composable
-fun SurveyScreen(navController: NavController? = null) {
-    val context = LocalContext.current
-    val activity = context as? Activity
+fun SurveyScreen(navController: NavController) {
+    val categoryViewModel: CategoryViewModel = hiltViewModel()
+    val profileViewModel: ProfileViewModel = hiltViewModel()
+    val categories = categoryViewModel.categories.collectAsState(initial = emptyList())
 
-    BackHandler {
-        activity?.finish()
-    }
+    val selectedCategories = remember { mutableStateListOf<Int>() }
 
-    val categories = listOf(
-        "Bahari", "Cagar Alam", "Suaka Margasatwa", "Pantai", "Pulau", "Hutan Lindung",
-        "Budaya", "Museum Sejarah", "Museum", "Situs Sejarah", "Tempat Ibadah", "Pasar",
-        "Mall", "Taman Hiburan", "Pusat Perbelanjaan", "Water Park", "Taman Edukasi"
-    )
-    val selectedCategories = remember { mutableStateListOf<String>() }
-
-    Scaffold { innerPadding ->
+    Scaffold(
+        topBar = {
+            Box(modifier = Modifier.padding(top = 16.dp)) {
+                CustomHeaderTitle(
+                    onClick = { navController.navigate(Screen.Home.route) },
+                    title = "Preferensi"
+                )
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -83,21 +84,21 @@ fun SurveyScreen(navController: NavController? = null) {
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(categories.chunked(2)) { rowCategories ->
+                items(categories.value.chunked(2)) { rowCategories ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         rowCategories.forEach { category ->
-                            val isSelected = selectedCategories.contains(category)
+                            val isSelected = selectedCategories.contains(category.id)
                             CategoryItem(
-                                category = category,
+                                category = category.name,
                                 isSelected = isSelected,
                                 onClick = {
                                     if (isSelected) {
-                                        selectedCategories.remove(category)
+                                        selectedCategories.remove(category.id)
                                     } else if (selectedCategories.size < 5) {
-                                        selectedCategories.add(category)
+                                        selectedCategories.add(category.id)
                                     }
                                 }
                             )
@@ -109,9 +110,15 @@ fun SurveyScreen(navController: NavController? = null) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { navController?.navigate(Screen.Home.route) },
+                onClick = {
+                    profileViewModel.postPreferences(selectedCategories)
+
+                    navController.navigate(Screen.Home.route)
+                },
                 enabled = selectedCategories.size == 5,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
                 shape = CircleShape
             ) {
                 Text(
@@ -150,13 +157,5 @@ fun CategoryItem(category: String, isSelected: Boolean, onClick: () -> Unit) {
                 color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onTertiary
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CategorySelectionScreenPreview() {
-    AppTheme {
-        SurveyScreen()
     }
 }

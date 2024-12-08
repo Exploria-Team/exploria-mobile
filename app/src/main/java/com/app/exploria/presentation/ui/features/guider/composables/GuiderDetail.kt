@@ -45,6 +45,7 @@ import com.app.exploria.presentation.ui.features.common.NavigationBottom
 import com.app.exploria.presentation.ui.navigation.Screen
 import com.app.exploria.presentation.viewModel.TourGuideViewModel
 import com.app.exploria.utils.openWhatsApp
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun GuiderDetailScreen(id: String?, navController: NavController) {
@@ -150,14 +151,25 @@ fun ProfileSection(tourGuide: GetTourGuideByIdData) {
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .size(130.dp)
-                .clip(CircleShape)
-        )
+        if (tourGuide.photoUrl.isNotEmpty()) {
+            GlideImage(
+                imageModel = tourGuide.photoUrl,
+                contentDescription = tourGuide.name,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .size(130.dp)
+                    .clip(CircleShape)
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.profiledefault),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .size(130.dp)
+                    .clip(CircleShape)
+            )
+        }
         Text(
             tourGuide.name,
             style = TextStyle(

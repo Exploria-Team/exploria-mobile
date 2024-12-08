@@ -19,11 +19,14 @@ import com.app.exploria.presentation.ui.features.planning.composables.FinalPlann
 import com.app.exploria.presentation.ui.features.planning.composables.PlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.SecondPlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.SelectDestinationScreen
+import com.app.exploria.presentation.ui.features.profile.composables.ProfileForm
 import com.app.exploria.presentation.ui.features.profile.composables.ProfileScreen
 import com.app.exploria.presentation.ui.features.register.composables.RegisterScreen
 import com.app.exploria.presentation.ui.features.search.composables.SearchScreen
+import com.app.exploria.presentation.ui.features.splash.composables.SplashScreen
 import com.app.exploria.presentation.ui.features.survey.composables.SurveyScreen
 import com.app.exploria.presentation.viewModel.MainViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavigation(mainViewModel: MainViewModel) {
@@ -34,24 +37,22 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         mainViewModel.loadUser()
     }
 
-    LaunchedEffect(userState) {
-        if (userState?.isLogin == true) {
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
-            }
-        } else {
-            navController.navigate(Screen.Login.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
-            }
-        }
-    }
-
     NavHost(
         navController = navController,
-        startDestination = if (userState?.isLogin == true) Screen.Home.route else Screen.Login.route,
+        startDestination = Screen.Splash.route,
     ) {
-
-        composable(Screen.Home.route) { HomeScreen(navController) }
+        composable(Screen.Splash.route) {
+            SplashScreen()
+            LaunchedEffect(Unit) {
+                delay(2000)
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Splash.route) {inclusive = true}
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        }
+        composable(Screen.Home.route) { HomeScreen(navController, userState) }
         composable(Screen.Plan.route) { PlanningScreen(navController) }
         composable(Screen.Favorite.route) { FavoriteScreen(navController) }
         composable(Screen.Login.route) { LoginScreen(navController, mainViewModel) }
@@ -66,7 +67,7 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { navBackStackEntry ->
             val detailId = navBackStackEntry.arguments?.getString("id")
-            DetailScreen(detailId, navController)
+            DetailScreen(detailId, navController, userState)
         }
         composable(
             route = Screen.DetailGuide.route,
@@ -77,5 +78,6 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         }
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.Guide.route) { GuideListScreen(navController) }
+        composable(Screen.ProfileForm.route) { ProfileForm(navController, mainViewModel) }
     }
 }

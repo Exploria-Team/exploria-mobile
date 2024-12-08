@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,6 +25,7 @@ import com.app.exploria.R
 import com.app.exploria.data.remote.response.ReviewsItem
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun ReviewCard(review: ReviewsItem) {
@@ -38,16 +40,30 @@ fun ReviewCard(review: ReviewsItem) {
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(R.drawable.avatar13),
-                    contentDescription = "Reviewer Image",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(24.dp)),
-                    contentScale = ContentScale.Crop
-                )
+                if (review.user.profilePictureUrl.isNotEmpty()) {
+                    GlideImage(
+                        imageModel = review.user.profilePictureUrl,
+                        contentDescription = review.user.name,
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.profiledefault),
+                        contentDescription = "Reviewer Image",
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(RoundedCornerShape(24.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 Spacer(modifier = Modifier.width(16.dp))
-                Column(modifier = Modifier.weight(1f).padding(bottom = 16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(bottom = 16.dp)
+                ) {
                     Row {
                         RatingBar(
                             value = review.rating.toFloat(),
@@ -59,7 +75,10 @@ fun ReviewCard(review: ReviewsItem) {
                             }
                         )
                     }
-                    Text(text = review.user.name ?: "Unknown", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = review.user.name ?: "Unknown",
+                        style = MaterialTheme.typography.titleMedium
+                    )
                 }
             }
 

@@ -73,6 +73,9 @@ data class TourGuidesItem(
 	@field:SerializedName("email")
 	val email: String,
 
+	@field:SerializedName("photoUrl")
+	val photoUrl: String,
+
 	@field:SerializedName("categoryGroup")
 	val categoryGroup: String
 ) : Parcelable

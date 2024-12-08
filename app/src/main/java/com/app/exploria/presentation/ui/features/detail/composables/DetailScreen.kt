@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.components.EmptyView
 import com.app.exploria.presentation.viewModel.DestinationViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(id: String?, navController: NavController) {
+fun DetailScreen(id: String?, navController: NavController, userModel: UserModel?) {
     val destinationViewModel: DestinationViewModel = hiltViewModel()
     val destinationData by destinationViewModel.destinationData.collectAsState()
 
@@ -45,7 +46,7 @@ fun DetailScreen(id: String?, navController: NavController) {
             if (destinationData != null) {
                 Column(modifier = Modifier.fillMaxSize()) {
                     ImagePreviewComponent(destinationData!!)
-                    BodyDetailComponent(navController, destinationData!!)
+                    BodyDetailComponent(navController, destinationData!!, userModel)
                 }
             } else {
                 EmptyView("Mohon Tunggu")
