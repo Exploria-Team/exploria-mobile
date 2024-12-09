@@ -17,9 +17,24 @@ data class PostPlanResponse(
 @Parcelize
 data class PostPlanData(
 
+	@field:SerializedName("createdAt")
+	val createdAt: String,
+
+	@field:SerializedName("totalDays")
+	val totalDays: Int,
+
+	@field:SerializedName("endDate")
+	val endDate: String,
+
+	@field:SerializedName("name")
+	val name: String,
+
 	@field:SerializedName("id")
 	val id: String,
 
 	@field:SerializedName("userId")
-	val userId: Int
+	val userId: Int,
+
+	@field:SerializedName("startDate")
+	val startDate: String
 ) : Parcelable
