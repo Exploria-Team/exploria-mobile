@@ -1,6 +1,8 @@
 package com.app.exploria.presentation.ui.features.detail.composables
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -65,15 +67,21 @@ fun ReviewCard(review: ReviewsItem) {
                         .padding(bottom = 16.dp)
                 ) {
                     Row {
-                        RatingBar(
-                            value = review.rating.toFloat(),
-                            style = RatingBarStyle.Fill(),
-                            size = 16.dp,
-                            spaceBetween = 1.dp,
-                            onValueChange = {},
-                            onRatingChanged = {
-                            }
-                        )
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(MaterialTheme.colorScheme.secondary)
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            RatingBar(
+                                value = review.rating.toFloat(),
+                                style = RatingBarStyle.Fill(),
+                                size = 16.dp,
+                                spaceBetween = 1.dp,
+                                onValueChange = {},
+                                onRatingChanged = {}
+                            )
+                        }
                     }
                     Text(
                         text = review.user.name ?: "Unknown",

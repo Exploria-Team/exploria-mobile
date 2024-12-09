@@ -33,12 +33,6 @@ fun ReviewFragment(navController: NavController, id: Int, userModel: UserModel?)
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        if (reviews.loadState.refresh is LoadState.Loading) {
-            item {
-                CircularProgressIndicator()
-            }
-        }
-
         if (userModel?.isLogin == true) {
             item {
                 Row(
@@ -57,6 +51,18 @@ fun ReviewFragment(navController: NavController, id: Int, userModel: UserModel?)
                         width = 100,
                         textStyle = MaterialTheme.typography.titleMedium
                     )
+                }
+            }
+        }
+
+        if (reviews.loadState.refresh is LoadState.Loading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
                 }
             }
         }
