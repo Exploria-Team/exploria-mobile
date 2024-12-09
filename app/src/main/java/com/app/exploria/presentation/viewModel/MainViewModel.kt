@@ -59,10 +59,12 @@ class MainViewModel @Inject constructor(
                 val result = userRepository.login(email, password)
                 val loginResponse = result.getOrNull()
 
-                if (result.isSuccess && loginResponse != null && loginResponse.token.isNotEmpty()) {
+                if (result.isSuccess && loginResponse != null) {
                     val userModel = UserModel(
+                        name = loginResponse.user.name,
                         email = loginResponse.user.email,
                         token = loginResponse.token,
+                        profilePictureUrl = loginResponse.user.profilePictureUrl ?: "",
                         isLogin = true
                     )
                     _user.value = loginResponse.user

@@ -18,8 +18,10 @@ class UserPreference @Inject constructor(
 
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
+            preferences[NAME_KEY] = user.name
             preferences[EMAIL_KEY] = user.email
             preferences[TOKEN] = user.token
+            preferences[PICTURE_KEY] = user.profilePictureUrl ?: ""
             preferences[IS_LOGIN_KEY] = user.token.isNotEmpty()
         }
     }
@@ -27,8 +29,10 @@ class UserPreference @Inject constructor(
     fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             UserModel(
+                preferences[NAME_KEY] ?: "",
                 preferences[EMAIL_KEY] ?: "",
                 preferences[TOKEN] ?: "",
+                preferences[PICTURE_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false
             )
         }
@@ -39,8 +43,10 @@ class UserPreference @Inject constructor(
     }
 
     companion object {
+        private val NAME_KEY = stringPreferencesKey("name")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN = stringPreferencesKey("token")
+        private val PICTURE_KEY = stringPreferencesKey("picture")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
     }
 }
