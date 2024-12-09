@@ -17,10 +17,13 @@ class ModelViewModel @Inject constructor(
     private val modelRepository: ModelRepository
 ) : BaseViewModel() {
     private val _normalModelData = MutableStateFlow<PagingData<NormalModelDataItem>>(PagingData.empty())
-    val normalModelData : StateFlow<PagingData<NormalModelDataItem>> get() = _normalModelData
+    val normalModelData: StateFlow<PagingData<NormalModelDataItem>> get() = _normalModelData
 
     private val _distanceModelData = MutableStateFlow<List<DistanceModelDataItem>>(emptyList())
-    val distanceModelData : StateFlow<List<DistanceModelDataItem>> get() = _distanceModelData
+    val distanceModelData: StateFlow<List<DistanceModelDataItem>> get() = _distanceModelData
+
+    private val _isDistanceMode = MutableStateFlow(false)
+    val isDistanceMode: StateFlow<Boolean> get() = _isDistanceMode
 
     fun fetchNormalModel() {
         setLoading(true)
@@ -32,17 +35,22 @@ class ModelViewModel @Inject constructor(
         }
     }
 
-    fun getDistanceModel(id : Int) {
+    fun fetchDistanceModel(id: Int) {
         setLoading(true)
         viewModelScope.launch {
             val result = modelRepository.getDistanceModel(id)
-
             result.onSuccess { data ->
                 _distanceModelData.value = data
+                _isDistanceMode.value = true
             }.onFailure {
                 setErrorMessage(it.message)
             }
             setLoading(false)
         }
+    }
+
+    fun resetToNormalModel() {
+        _isDistanceMode.value = false
+        fetchNormalModel()
     }
 }
