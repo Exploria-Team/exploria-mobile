@@ -11,7 +11,7 @@ data class PostFavoriteResponse(
 	val statusCode: Int,
 
 	@field:SerializedName("data")
-	val data: PostFavoriteData,
+	val data: PostFavoriteData?,
 
 	@field:SerializedName("message")
 	val message: String
