@@ -37,6 +37,7 @@ fun ProfileScreen(
     val profileViewModel: ProfileViewModel = hiltViewModel()
     val userData by profileViewModel.userData.collectAsState()
     val user by mainViewModel.user.collectAsState()
+    val userModel by mainViewModel.userModel.collectAsState()
 
     LaunchedEffect(user) {
         user?.let {
@@ -67,7 +68,7 @@ fun ProfileScreen(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (user?.profilePictureUrl.isNullOrEmpty()) {
+                if (userData?.profilePictureUrl.isNullOrEmpty()) {
                     Image(
                         painter = painterResource(id = R.drawable.profiledefault),
                         contentDescription = "Profile Picture",
@@ -77,19 +78,21 @@ fun ProfileScreen(
                             .clip(CircleShape)
                     )
                 } else {
-                    user?.let {
-                        GlideImage(
-                            imageModel = it.profilePictureUrl,
-                            contentDescription = user!!.name,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .padding(bottom = 8.dp)
-                                .size(130.dp)
-                                .clip(CircleShape)
-                        )
+                    userModel?.let {
+                        it.profilePictureUrl?.let { data ->
+                            GlideImage(
+                                imageModel = data,
+                                contentDescription = userModel!!.name,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .padding(bottom = 8.dp)
+                                    .size(130.dp)
+                                    .clip(CircleShape)
+                            )
+                        }
                     }
                 }
-                userData?.name?.let {
+                userModel?.name?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.headlineMedium,
@@ -108,7 +111,7 @@ fun ProfileScreen(
                 SettingsListItem(title = "Keluar", icon = R.drawable.logout, onClick = {
                     mainViewModel.logout()
 
-                    navController.navigate(Screen.Login.route) {
+                    navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Profile.route) { inclusive = true }
                         launchSingleTop = true
                     }
