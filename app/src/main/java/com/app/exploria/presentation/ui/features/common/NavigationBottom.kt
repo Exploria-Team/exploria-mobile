@@ -19,7 +19,7 @@ import com.app.exploria.presentation.ui.navigation.Screen
 fun NavigationBottom(navController: NavController, user: UserModel? = null) {
     val items = listOf(
         Screen.Home,
-        Screen.Plan,
+        Screen.CreatePlan,
         Screen.Favorite,
         Screen.Guide
     )
@@ -30,9 +30,9 @@ fun NavigationBottom(navController: NavController, user: UserModel? = null) {
                 icon = {
                     when (screen) {
                         is Screen.Home -> Icon(Icons.Filled.Home, contentDescription = "Home")
-                        is Screen.Plan -> Icon(Icons.Outlined.Place, contentDescription = "Plan")
+                        is Screen.CreatePlan -> Icon(Icons.Outlined.Place, contentDescription = "CreatePlan")
                         is Screen.Favorite -> Icon(
-                            Icons.Outlined.Favorite,
+                                Icons.Outlined.Favorite,
                             contentDescription = "Favorite"
                         )
                         is Screen.Guide -> Icon(
@@ -44,7 +44,7 @@ fun NavigationBottom(navController: NavController, user: UserModel? = null) {
                 label = {
                     when (screen) {
                         is Screen.Home -> Text("Home")
-                        is Screen.Plan -> Text("Rencana")
+                        is Screen.CreatePlan -> Text("Rencana")
                         is Screen.Favorite -> Text("Favorite")
                         is Screen.Guide -> Text("Guide")
                         else -> {}
@@ -52,7 +52,7 @@ fun NavigationBottom(navController: NavController, user: UserModel? = null) {
                 },
                 selected = navController.currentDestination?.route == screen.route,
                 onClick = {
-                    if (screen == Screen.Plan || screen == Screen.Favorite) {
+                    if (screen == Screen.CreatePlan || screen == Screen.Favorite) {
                         if (user?.isLogin == true) {
                             navController.navigate(screen.route) {
                                 popUpTo(navController.graph.startDestinationId) {
