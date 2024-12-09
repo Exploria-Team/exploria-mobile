@@ -13,6 +13,7 @@ import com.app.exploria.data.remote.response.GetAllDestinationResponse
 import com.app.exploria.data.remote.response.GetAllUserFavoriteResponse
 import com.app.exploria.data.remote.response.GetDestinationByIdResponse
 import com.app.exploria.data.remote.response.GetPlanDestinationByIdResponse
+import com.app.exploria.data.remote.response.GetPlanDestinationByIdResponseItem
 import com.app.exploria.data.remote.response.GetPlansResponse
 import com.app.exploria.data.remote.response.GetPreferenceResponse
 import com.app.exploria.data.remote.response.GetReviewResponse
@@ -117,7 +118,7 @@ interface ApiService {
     suspend fun postPlan(@Body planRequest: PlanRequest): PostPlanResponse
 
     @GET("travel-plan/destination/{id}")
-    suspend fun getPlanById(@Path("id") id: String): GetPlanDestinationByIdResponse
+    suspend fun getPlanById(@Path("id") id: String): List<GetPlanDestinationByIdResponseItem>
 
     @POST("travel-plan/destination")
     suspend fun uploadDestinationPlan(
