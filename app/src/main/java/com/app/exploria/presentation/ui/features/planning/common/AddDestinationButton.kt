@@ -1,5 +1,6 @@
 package com.app.exploria.presentation.ui.features.planning.common
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +24,7 @@ fun AddDestinationButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
         modifier = Modifier
+            .border(2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(20.dp),
