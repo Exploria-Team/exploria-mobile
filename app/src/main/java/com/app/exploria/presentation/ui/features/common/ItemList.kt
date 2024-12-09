@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.navigation.Screen
+import com.app.exploria.presentation.viewModel.UserFavoriteViewModel
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
@@ -30,11 +35,14 @@ fun <T> ItemList(
     getName: (T?) -> String?,
     getPhotoUrls: (T?) -> List<String>?
 ) {
+    val id = getId(destination)
+    val favoriteViewModel: UserFavoriteViewModel = hiltViewModel()
+    val isFavorite = favoriteViewModel.favoriteItem.collectAsState().value.any { it.destination.id == id }
+
     Box(
         modifier = modifier
             .size(180.dp)
             .clickable {
-                val id = getId(destination)
                 navController.navigate("detail/$id") {
                     launchSingleTop = true
                     popUpTo(Screen.Home.route) { inclusive = false }
@@ -64,11 +72,20 @@ fun <T> ItemList(
             )
         }
 
-        CustomButtonNavigation(
-            icon = Icons.Filled.FavoriteBorder, modifier = Modifier
+        Box(
+            modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(end = 10.dp, top = 5.dp)
-        )
+        ) {
+            CustomButtonNavigation(
+                icon = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                iconColor = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.clickable {
+                    id?.let { favoriteViewModel.toggleFavorite(it) }
+                }
+            )
+
+        }
     }
 }
 
