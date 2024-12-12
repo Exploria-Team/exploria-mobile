@@ -38,11 +38,15 @@ To develop this application, we use:
 - **Android Studio**: The primary IDE for app development.
 - **Kotlin**: The programming language for building modern and efficient Android apps.
 - **Jetpack Compose**: For building declarative and responsive UI components.
-- **Firebase**: For user authentication, real-time database, and analytics.
+- **Glide**: An image loading and caching library for efficient image rendering in Android apps.
 - **Google Maps API**: To provide location-based features and route optimization.
 - **Retrofit**: For API integration to fetch sustainable travel data and user preferences.
 - **Room Database**: For offline data storage and retrieval.
-- **TensorFlow Lite**: For running machine learning models on-device.
+- **Dagger-Hilt**: A dependency injection library to manage app components and ensure modularity and testability.
+- **Coroutines**: For asynchronous programming, enabling efficient handling of background tasks and threading.
+- **Paging 3**: To load large datasets efficiently in the app with pagination support.
+- **Coil**: An image loading library optimized for modern Android apps using Kotlin.
+- **JUnit & Espresso**: For unit testing and UI testing to ensure app stability and reliability.
 
 ## Architecture
 
