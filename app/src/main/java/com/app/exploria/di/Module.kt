@@ -1,5 +1,6 @@
 package com.app.exploria.di
 
+import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -38,6 +39,10 @@ object Module {
 
     @Provides
     @Singleton
+    fun provideContext(application: Application): Context = application.applicationContext
+
+    @Provides
+    @Singleton
     fun provideDestinationDao(appDatabase: CategoryDatabase): CategoryDao {
         return appDatabase.categoryDao()
     }
@@ -71,12 +76,12 @@ object Module {
     @Provides
     @Singleton
     @Named("ApiServiceWithToken")
-    fun provideApiServiceWithToken(apiConfig: ApiConfig, userPreference: UserPreference): ApiService {
-        val token = runBlocking {
-            userPreference.getSession().map { it.token }.firstOrNull()
-        }
-        if (token.isNullOrEmpty()) throw IllegalStateException("Token is not available")
+    fun provideApiServiceWithToken(
+        apiConfig: ApiConfig,
+        userPreference: UserPreference
+    ): ApiService {
+        val tokenFlow = userPreference.getSession().map { it.token }
 
-        return apiConfig.provideApiServiceWithToken(token)
+        return apiConfig.provideApiServiceWithDynamicToken(tokenFlow)
     }
 }
