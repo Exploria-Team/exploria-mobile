@@ -1,5 +1,7 @@
 package com.app.exploria.presentation.viewModel
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
@@ -21,12 +23,14 @@ class ProfileViewModel @Inject constructor(
     val userData: StateFlow<Data?> get() = _userData
 
     private val _postPreferenceResult = mutableStateOf<Result<PreferenceResponse>?>(null)
-    val PostPreferenceResult: State<Result<PreferenceResponse>?> = _postPreferenceResult
+    val postPreferenceResult: State<Result<PreferenceResponse>?> = _postPreferenceResult
 
     private val _preferencesResult =
         mutableStateOf<Result<List<GetPreferenceDataItem>>>(Result.success(emptyList()))
     val preferencesResult: State<Result<List<GetPreferenceDataItem>>> get() = _preferencesResult
 
+    private val _updateDataUserResult = MutableStateFlow<Result<Data>?>(null)
+    val updateDataUserResult: StateFlow<Result<Data>?> get() = _updateDataUserResult
 
     fun getDataUser(id: Int) {
         setLoading(true)
@@ -47,19 +51,23 @@ class ProfileViewModel @Inject constructor(
         id: Int,
         name: String?,
         email: String?,
-        profilePictureUrl: String?,
-        birthdate: String?
+        profilePictureUri: Uri?,
+        age: String?
     ) {
         setLoading(true)
         viewModelScope.launch {
             val result =
-                profileRepository.updateUserData(id, name, email, profilePictureUrl, birthdate)
+                profileRepository.updateUserData(id, name, email, profilePictureUri, age)
+
+            _updateDataUserResult.value = result
 
             result.onSuccess { updatedData ->
                 _userData.value = updatedData
                 clearErrorMessage()
+                Log.d("ProfileViewModel", "User data updated successfully.")
             }.onFailure {
                 setErrorMessage(it.message)
+                Log.e("ProfileViewModel", "Failed to update user data: ${it.message}")
             }
             setLoading(false)
         }
