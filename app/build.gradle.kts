@@ -18,7 +18,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "BASE_URL", "\"https://exploria-backend-14669887025.asia-southeast2.run.app/api/v1/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -43,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -55,20 +56,10 @@ android {
 }
 
 secrets {
-    // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
-    // 2. Add this line, where YOUR_API_KEY is your API key:
-    //        MAPS_API_KEY=YOUR_API_KEY
     propertiesFileName = "secrets.properties"
-
-    // A properties file containing default secret values. This file can be
-    // checked in version control.
     defaultPropertiesFileName = "local.defaults.properties"
-
-    // Configure which keys should be ignored by the plugin by providing regular expressions.
-    // "sdk.dir" is ignored by default.
-    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
-    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
+    ignoreList.add("keyToIgnore")
+    ignoreList.add("sdk.*")
 }
 
 
@@ -76,7 +67,7 @@ dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
     implementation (libs.compose.ratingbar)
-
+    implementation(libs.coil.compose)
 
     //compose
     val composeBom = platform(libs.androidx.compose.bom)
