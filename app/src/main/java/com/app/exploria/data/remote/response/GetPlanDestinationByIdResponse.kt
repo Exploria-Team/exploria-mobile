@@ -7,18 +7,27 @@ import com.google.gson.annotations.SerializedName
 @Parcelize
 data class GetPlanDestinationByIdResponse(
 
-	@field:SerializedName("GetPlanDestinationByIdResponse")
-	val getPlanDestinationByIdResponse: List<GetPlanDestinationByIdResponseItem>
+	@field:SerializedName("status_code")
+	val statusCode: Int,
+
+	@field:SerializedName("data")
+	val data: List<GetPlanDestinationByIdResponseItem>
 ) : Parcelable
 
 @Parcelize
 data class GetPlanDestinationByIdDestination(
 
 	@field:SerializedName("entryFee")
-	val entryFee: String,
+	val entryFee: Int,
+
+	@field:SerializedName("photoUrls")
+	val photoUrls: List<String>,
 
 	@field:SerializedName("visitDurationMinutes")
 	val visitDurationMinutes: Int,
+
+	@field:SerializedName("city")
+	val city: String,
 
 	@field:SerializedName("averageRating")
 	val averageRating: Float,
@@ -35,8 +44,8 @@ data class GetPlanDestinationByIdDestination(
 	@field:SerializedName("id")
 	val id: Int,
 
-	@field:SerializedName("cityId")
-	val cityId: Int,
+	@field:SerializedName("categories")
+	val categories: List<String>,
 
 	@field:SerializedName("lat")
 	val lat: Double

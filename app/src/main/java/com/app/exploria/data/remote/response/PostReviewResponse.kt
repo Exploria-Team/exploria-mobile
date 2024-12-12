@@ -17,11 +17,14 @@ data class PostReviewResponse(
 @Parcelize
 data class PostReviewData(
 
+	@field:SerializedName("reviewPhotoUrl")
+	val reviewPhotoUrl: String,
+
 	@field:SerializedName("reviewDate")
 	val reviewDate: String,
 
 	@field:SerializedName("rating")
-	val rating: Float,
+	val rating: Int,
 
 	@field:SerializedName("id")
 	val id: String,
@@ -30,7 +33,7 @@ data class PostReviewData(
 	val destinationId: Int,
 
 	@field:SerializedName("userId")
-	val userId: String,
+	val userId: Int,
 
 	@field:SerializedName("reviewText")
 	val reviewText: String

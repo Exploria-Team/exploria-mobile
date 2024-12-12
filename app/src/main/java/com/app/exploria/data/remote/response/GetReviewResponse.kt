@@ -25,25 +25,6 @@ data class GetReviewData(
 ) : Parcelable
 
 @Parcelize
-data class ReviewsItem(
-
-	@field:SerializedName("reviewDate")
-	val reviewDate: String,
-
-	@field:SerializedName("rating")
-	val rating: Int,
-
-	@field:SerializedName("id")
-	val id: String,
-
-	@field:SerializedName("user")
-	val user: User,
-
-	@field:SerializedName("reviewText")
-	val reviewText: String
-) : Parcelable
-
-@Parcelize
 data class User(
 
 	@field:SerializedName("profilePictureUrl")
@@ -70,4 +51,26 @@ data class ReviewPagination(
 
 	@field:SerializedName("currentPage")
 	val currentPage: Int
+) : Parcelable
+
+@Parcelize
+data class ReviewsItem(
+
+	@field:SerializedName("reviewPhotoUrl")
+	val reviewPhotoUrl: String,
+
+	@field:SerializedName("reviewDate")
+	val reviewDate: String,
+
+	@field:SerializedName("rating")
+	val rating: Int,
+
+	@field:SerializedName("id")
+	val id: String,
+
+	@field:SerializedName("user")
+	val user: User,
+
+	@field:SerializedName("reviewText")
+	val reviewText: String
 ) : Parcelable
