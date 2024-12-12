@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -23,6 +24,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +32,7 @@ import androidx.navigation.NavController
 import com.app.exploria.R
 import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.navigation.Screen
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun HeaderComponent(navController: NavController, user: UserModel?) {
@@ -64,7 +67,7 @@ fun HeaderComponent(navController: NavController, user: UserModel?) {
                     disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     disabledTextColor = MaterialTheme.colorScheme.onSurface,
                     disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    disabledIndicatorColor = MaterialTheme.colorScheme.primary
                 )
             )
         }
@@ -78,21 +81,36 @@ fun HeaderComponent(navController: NavController, user: UserModel?) {
                 .clickable { /* Handle notification click */ }
         )
 
-        Image(
-            painter = painterResource(id = R.drawable.profiledefault),
-            contentDescription = "Foto Profil",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(40.dp)
-                .clickable {
-                    if (user?.isLogin == true) {
+        if (user?.profilePictureUrl?.isNotEmpty() == true) {
+            GlideImage(
+                imageModel = user.profilePictureUrl,
+                contentDescription = user.name,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .clickable {
                         navController.navigate(Screen.Profile.route) {
                             launchSingleTop = true
                         }
-                    } else {
-                        navController.navigate(Screen.Login.route)
                     }
-                }
-        )
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.profiledefault),
+                contentDescription = "Foto Profil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        if (user?.isLogin == true) {
+                            navController.navigate(Screen.Profile.route) {
+                                launchSingleTop = true
+                            }
+                        } else {
+                            navController.navigate(Screen.Login.route)
+                        }
+                    }
+            )
+        }
     }
 }
