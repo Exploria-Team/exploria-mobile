@@ -1,17 +1,36 @@
 package com.app.exploria.presentation.ui.features.profile.composables
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +47,7 @@ import com.app.exploria.presentation.ui.features.common.CustomTextField
 import com.app.exploria.presentation.viewModel.MainViewModel
 import com.app.exploria.presentation.viewModel.ProfileViewModel
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileForm(navController: NavController, mainViewModel: MainViewModel) {
@@ -35,14 +55,59 @@ fun ProfileForm(navController: NavController, mainViewModel: MainViewModel) {
     val emailState = remember { mutableStateOf(TextFieldValue()) }
     val dateState = remember { mutableStateOf(TextFieldValue()) }
     val profileViewModel: ProfileViewModel = hiltViewModel()
-    val userData by profileViewModel.userData.collectAsState()
-    val user by mainViewModel.user.collectAsState()
-    val profilePictureUri = remember { mutableStateOf<String?>(null) }
+    val user by mainViewModel.userModel.collectAsState()
+    val profilePictureUri = remember { mutableStateOf<Uri?>(null) }
+
+    val coroutineScope = rememberCoroutineScope()
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            profilePictureUri.value = uri?.toString()
+            profilePictureUri.value = uri
         }
+
+    LaunchedEffect(user) {
+        user?.let { data ->
+            nameState.value = TextFieldValue(data.name)
+            emailState.value = TextFieldValue(data.email)
+            dateState.value = TextFieldValue("")
+        }
+    }
+
+    val onSaveProfile = {
+        coroutineScope.launch {
+            profileViewModel.updateDataUser(
+                id = user?.id ?: 0,
+                name = nameState.value.text.takeIf { it.isNotBlank() },
+                email = emailState.value.text.takeIf { it.isNotBlank() },
+                profilePictureUri = profilePictureUri.value,
+                age = dateState.value.text.takeIf { it.isNotBlank() }
+            )
+        }
+    }
+
+    val updateResult by profileViewModel.updateDataUserResult.collectAsState()
+
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(updateResult) {
+        updateResult?.let { result ->
+            if (result.isSuccess) {
+                result.getOrNull()?.let { updatedData ->
+                    val updatedUser = user?.copy(
+                        name = updatedData.name ?: user!!.name,
+                        email = updatedData.email ?: user!!.email,
+                        profilePictureUrl = updatedData.profilePictureUrl ?: user!!.profilePictureUrl
+                    )
+                    updatedUser?.let { mainViewModel.saveSession(it) }
+                }
+
+                snackbarHostState.showSnackbar("Profil berhasil diperbarui!")
+                navController.popBackStack()
+            } else {
+                snackbarHostState.showSnackbar("Gagal memperbarui profil: ${result.exceptionOrNull()?.message}")
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -52,7 +117,8 @@ fun ProfileForm(navController: NavController, mainViewModel: MainViewModel) {
                     title = "Profile"
                 )
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -65,7 +131,7 @@ fun ProfileForm(navController: NavController, mainViewModel: MainViewModel) {
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (profilePictureUri.value.isNullOrEmpty() && user?.profilePictureUrl.isNullOrEmpty()) {
+                if (profilePictureUri.value == null && user?.profilePictureUrl.isNullOrEmpty()) {
                     Image(
                         painter = painterResource(id = R.drawable.profiledefault),
                         contentDescription = "Profile Picture",
@@ -75,7 +141,8 @@ fun ProfileForm(navController: NavController, mainViewModel: MainViewModel) {
                             .clip(CircleShape)
                     )
                 } else {
-                    (profilePictureUri.value ?: user?.profilePictureUrl)?.let {
+                    val imageUri = profilePictureUri.value?.toString() ?: user?.profilePictureUrl
+                    imageUri?.let {
                         GlideImage(
                             imageModel = it,
                             contentDescription = user?.name,
@@ -88,40 +155,41 @@ fun ProfileForm(navController: NavController, mainViewModel: MainViewModel) {
                     }
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-
-                ) {
-
                 Button(onClick = { imagePickerLauncher.launch("image/*") }) {
                     Text("Change Profile Picture")
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    CustomTextField(
-                        value = nameState.value,
-                        onValueChange = { nameState.value = it },
-                        label = "Username",
-                        icon = Icons.Default.AccountCircle
-                    )
 
-                    CustomTextField(
-                        value = emailState.value,
-                        onValueChange = { emailState.value = it },
-                        label = "Email",
-                        icon = Icons.Default.Email
-                    )
+                CustomTextField(
+                    value = nameState.value,
+                    onValueChange = { nameState.value = it },
+                    label = "Username",
+                    icon = Icons.Default.AccountCircle
+                )
 
-                    CustomTextField(
-                        value = dateState.value,
-                        onValueChange = { dateState.value = it },
-                        label = "Date",
-                        icon = Icons.Default.DateRange
-                    )
-                }
-                CustomButton("Simpan")
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CustomTextField(
+                    value = emailState.value,
+                    onValueChange = { emailState.value = it },
+                    label = "Email",
+                    icon = Icons.Default.Email
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+                CustomTextField(
+                    value = dateState.value,
+                    onValueChange = { dateState.value = it },
+                    label = "Date",
+                    icon = Icons.Default.DateRange
+                )
             }
+
+            CustomButton("Simpan", onClick = { onSaveProfile() })
         }
     }
 }
