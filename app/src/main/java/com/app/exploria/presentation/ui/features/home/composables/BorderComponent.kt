@@ -7,11 +7,10 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -34,6 +33,7 @@ fun BorderComponent(images: List<Int>, modifier: Modifier = Modifier) {
     HorizontalPager(state = pagerState) { page ->
         Card(
             modifier = modifier
+                .clip(RoundedCornerShape(32.dp))
                 .height(200.dp)
                 .graphicsLayer {
                     val pageOffset = (
@@ -48,18 +48,12 @@ fun BorderComponent(images: List<Int>, modifier: Modifier = Modifier) {
                     )
                 },
         ) {
-            Card(
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+            Image(
+                painter = painterResource(id = images[page]),
+                contentDescription = "Carousel Image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
-            ) {
-                Image(
-                    painter = painterResource(id = images[page]),
-                    contentDescription = "Carousel Image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+            )
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.app.exploria.presentation.ui.features.favorite.composables
 
-import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,20 +10,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.app.exploria.R
 import com.app.exploria.presentation.ui.features.common.CustomHeaderTitle
 import com.app.exploria.presentation.ui.features.common.ItemList
 import com.app.exploria.presentation.ui.features.common.NavigationBottom
 import com.app.exploria.presentation.ui.navigation.Screen
+import com.app.exploria.presentation.viewModel.UserFavoriteViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) {
     BackHandler {
@@ -35,23 +39,13 @@ fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) 
         }
     }
 
-    val favorites = listOf(
-        R.drawable.img,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2,
-        R.drawable.img2
-    )
+    val favoriteViewModel: UserFavoriteViewModel = hiltViewModel()
+    val favoriteList = favoriteViewModel.favorites.collectAsState().value
+    val loading = favoriteViewModel.isLoading.collectAsState()
+
+    LaunchedEffect(Unit) {
+        favoriteViewModel.getAllFavorites()
+    }
 
     Scaffold(
         topBar = {
@@ -74,17 +68,54 @@ fun FavoriteScreen(navController: NavController, modifier: Modifier = Modifier) 
                 .padding(innerPadding),
             color = MaterialTheme.colorScheme.surface
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(vertical = 8.dp),
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(favorites) { recommendation ->
-                    ItemList(navController)
+            when {
+                loading.value -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                favoriteList.isEmpty() -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Tidak ada Favorite di sini",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+                else -> {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(vertical = 8.dp),
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        items(favoriteList) { fav ->
+                            fav?.let {
+                                ItemList(
+                                    navController = navController,
+                                    destination = it,
+                                    getId = { it?.destination?.id },
+                                    getName = { it?.destination?.name },
+                                    getPhotoUrls = { it?.destination?.photoUrls },
+                                    favoriteViewModel = favoriteViewModel
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

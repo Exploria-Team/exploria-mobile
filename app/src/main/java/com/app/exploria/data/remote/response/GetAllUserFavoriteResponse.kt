@@ -30,6 +30,15 @@ data class GetAllUserFavoriteDataItem(
 @Parcelize
 data class GetAllUserFavoriteDestination(
 
+	@field:SerializedName("entryFee")
+	val entryFee: Int,
+
+	@field:SerializedName("photoUrls")
+	val photoUrls: List<String>,
+
+	@field:SerializedName("visitDurationMinutes")
+	val visitDurationMinutes: Int,
+
 	@field:SerializedName("city")
 	val city: String,
 
@@ -42,6 +51,15 @@ data class GetAllUserFavoriteDestination(
 	@field:SerializedName("description")
 	val description: String,
 
+	@field:SerializedName("lon")
+	val lon: Double,
+
 	@field:SerializedName("id")
-	val id: Int
+	val id: Int,
+
+	@field:SerializedName("categories")
+	val categories: List<String>,
+
+	@field:SerializedName("lat")
+	val lat: Double
 ) : Parcelable

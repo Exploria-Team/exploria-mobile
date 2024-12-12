@@ -1,5 +1,11 @@
 package com.app.exploria.data.remote.api
 
+import com.app.exploria.BuildConfig
+import com.app.exploria.data.remote.response.ErrorResponse
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,7 +36,7 @@ class ApiConfig @Inject constructor() {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://exploriaaaa-57676271991.asia-southeast2.run.app/api/v1/")
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -38,29 +44,26 @@ class ApiConfig @Inject constructor() {
         return retrofit.create(ApiService::class.java)
     }
 
-    fun provideApiServiceWithToken(token: String): ApiService {
+    fun provideApiServiceWithDynamicToken(tokenFlow: Flow<String?>): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         val authInterceptor = Interceptor { chain ->
-            val request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "$token")
-                .build()
+            val token = runBlocking { tokenFlow.firstOrNull() }
+            val request = chain.request().newBuilder().apply {
+                token?.let { addHeader("Authorization", "$it") }
+            }.build()
             chain.proceed(request)
         }
 
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
-            .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-            .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://exploriaaaa-57676271991.asia-southeast2.run.app/api/v1/")
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -68,4 +71,7 @@ class ApiConfig @Inject constructor() {
         return retrofit.create(ApiService::class.java)
     }
 
+    fun parseError(errorJson: String): ErrorResponse {
+        return Gson().fromJson(errorJson, ErrorResponse::class.java)
+    }
 }

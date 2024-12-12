@@ -3,17 +3,20 @@ package com.app.exploria.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.exploria.data.models.userData.UserModel
+import com.app.exploria.data.remote.api.ApiConfig
 import com.app.exploria.data.remote.response.LoginUser
 import com.app.exploria.data.repositories.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val apiConfig: ApiConfig
 ) : ViewModel() {
     private val _user = MutableStateFlow<LoginUser?>(null)
     val user: StateFlow<LoginUser?> get() = _user
@@ -55,30 +58,28 @@ class MainViewModel @Inject constructor(
     fun login(email: String, password: String) {
         _isLoading.value = true
         viewModelScope.launch {
-            try {
-                val result = userRepository.login(email, password)
-                val loginResponse = result.getOrNull()
+            val result = userRepository.login(email, password)
 
-                if (result.isSuccess && loginResponse != null && loginResponse.token.isNotEmpty()) {
-                    val userModel = UserModel(
-                        email = loginResponse.user.email,
-                        token = loginResponse.token,
-                        isLogin = true
-                    )
-                    _user.value = loginResponse.user
-                    _userModel.value = userModel
-                    clearErrorMessage()
-                    saveSession(userModel)
-                } else {
-                    _errorMessage.value = "Login gagal, Ulangi lagi."
-                }
-            } catch (e: Exception) {
-                _errorMessage.value = "An error occurred: ${e.localizedMessage}"
-            } finally {
-                _isLoading.value = false
+            result.onSuccess { loginResponse ->
+                val userModel = UserModel(
+                    id = loginResponse.user.id,
+                    name = loginResponse.user.name,
+                    email = loginResponse.user.email,
+                    token = loginResponse.token,
+                    profilePictureUrl = loginResponse.user.profilePictureUrl ?: "",
+                    isLogin = true
+                )
+                _user.value = loginResponse.user
+                _userModel.value = userModel
+                clearErrorMessage()
+                saveSession(userModel)
+            }.onFailure {
+                _errorMessage.value = parseErrorMessage(it)
             }
+            _isLoading.value = false
         }
     }
+
 
     fun register(name: String, email: String, password: String) {
         _isLoading.value = true
@@ -89,7 +90,7 @@ class MainViewModel @Inject constructor(
                 _isRegistered.value = true
                 clearErrorMessage()
             }.onFailure {
-                _errorMessage.value = it.message
+                _errorMessage.value = parseErrorMessage(it)
             }
             _isLoading.value = false
         }
@@ -99,8 +100,14 @@ class MainViewModel @Inject constructor(
         _errorMessage.value = null
     }
 
-    fun resetRegistrationState() {
-        _isRegistered.value = false
+    private fun parseErrorMessage(exception: Throwable): String {
+        return if (exception is HttpException) {
+            val errorJson = exception.response()?.errorBody()?.string()
+            val errorResponse = errorJson?.let { apiConfig.parseError(it) }
+            errorResponse?.message ?: "Unknown error occurred"
+        } else {
+            exception.message ?: "An error occurred"
+        }
     }
 
     fun setErrorMessage(message: String?) {

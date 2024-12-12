@@ -11,11 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.app.exploria.presentation.ui.features.detail.composables.DetailScreen
+import com.app.exploria.presentation.ui.features.detail.composables.ReviewFormScreen
 import com.app.exploria.presentation.ui.features.favorite.composables.FavoriteScreen
 import com.app.exploria.presentation.ui.features.guider.composables.GuideListScreen
 import com.app.exploria.presentation.ui.features.guider.composables.GuiderDetailScreen
 import com.app.exploria.presentation.ui.features.home.composables.HomeScreen
-import com.app.exploria.presentation.ui.features.planning.composables.FinalPlanningScreen
+import com.app.exploria.presentation.ui.features.planning.composables.CreatePlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.PlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.SecondPlanningScreen
 import com.app.exploria.presentation.ui.features.planning.composables.SelectDestinationScreen
@@ -46,7 +47,7 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             LaunchedEffect(Unit) {
                 delay(2000)
                 navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Splash.route) {inclusive = true}
+                    popUpTo(Screen.Splash.route) { inclusive = true }
                     launchSingleTop = true
                     restoreState = true
                 }
@@ -59,9 +60,44 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         composable(Screen.Register.route) { RegisterScreen(navController, mainViewModel) }
         composable(Screen.Survey.route) { SurveyScreen(navController) }
         composable(Screen.Profile.route) { ProfileScreen(navController, mainViewModel) }
-        composable(Screen.SecondPlan.route) { SecondPlanningScreen(navController) }
-        composable(Screen.FinalPlan.route) { FinalPlanningScreen(navController) }
-        composable(Screen.SelectDestination.route) { SelectDestinationScreen(navController) }
+        composable(
+            route = Screen.SecondPlan.route,
+            arguments = listOf(navArgument("planId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val planId = backStackEntry.arguments?.getString("planId") ?: ""
+            SecondPlanningScreen(navController = navController, planId = planId)
+        }
+        composable(
+            route = "select_destination_screen/{planId}/{destinationId}",
+            arguments = listOf(
+                navArgument("planId") { type = NavType.StringType },
+                navArgument("destinationId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val planId = backStackEntry.arguments?.getString("planId") ?: ""
+            val destinationId = backStackEntry.arguments?.getString("destinationId")?.toIntOrNull()
+            SelectDestinationScreen(
+                navController = navController,
+                planId = planId,
+                destinationId = destinationId
+            )
+        }
+
+        composable(
+            route = "select_destination_screen/{planId}",
+            arguments = listOf(
+                navArgument("planId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val planId = backStackEntry.arguments?.getString("planId") ?: ""
+            SelectDestinationScreen(
+                navController = navController,
+                planId = planId,
+                destinationId = null
+            )
+        }
+
+        composable(Screen.CreatePlan.route) { CreatePlanningScreen(navController, userState) }
         composable(
             route = Screen.Detail.route,
             arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -79,5 +115,12 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.Guide.route) { GuideListScreen(navController) }
         composable(Screen.ProfileForm.route) { ProfileForm(navController, mainViewModel) }
+        composable(
+            route = Screen.ReviewForm.route,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val destinationId = navBackStackEntry.arguments?.getString("id")
+            ReviewFormScreen(destinationId, navController)
+        }
     }
 }

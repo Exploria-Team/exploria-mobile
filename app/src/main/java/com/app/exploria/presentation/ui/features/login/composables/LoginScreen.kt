@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,9 +45,12 @@ fun LoginScreen(navController: NavController, mainViewModel: MainViewModel) {
     val userModel by mainViewModel.userModel.collectAsState()
     val validationError = remember { mutableStateOf<String?>(null) }
 
-    userModel?.let {
-        if (it.isLogin) {
-            navigateToHome(navController)
+    LaunchedEffect(userModel) {
+        if (userModel != null && userModel!!.isLogin && userModel!!.token.isNotEmpty()) {
+            kotlinx.coroutines.delay(200L)
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Login.route) { inclusive = true }
+            }
         }
     }
 

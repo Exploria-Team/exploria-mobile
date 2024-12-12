@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.app.exploria.data.models.userData.UserModel
 import kotlinx.coroutines.flow.Flow
@@ -18,8 +19,11 @@ class UserPreference @Inject constructor(
 
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
+            preferences[ID_KEY] = user.id
+            preferences[NAME_KEY] = user.name
             preferences[EMAIL_KEY] = user.email
             preferences[TOKEN] = user.token
+            preferences[PICTURE_KEY] = user.profilePictureUrl ?: ""
             preferences[IS_LOGIN_KEY] = user.token.isNotEmpty()
         }
     }
@@ -27,8 +31,11 @@ class UserPreference @Inject constructor(
     fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             UserModel(
+                preferences[ID_KEY] ?: 0,
+                preferences[NAME_KEY] ?: "",
                 preferences[EMAIL_KEY] ?: "",
                 preferences[TOKEN] ?: "",
+                preferences[PICTURE_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false
             )
         }
@@ -39,8 +46,11 @@ class UserPreference @Inject constructor(
     }
 
     companion object {
+        private val ID_KEY = intPreferencesKey("id")
+        private val NAME_KEY = stringPreferencesKey("name")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN = stringPreferencesKey("token")
+        private val PICTURE_KEY = stringPreferencesKey("picture")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
     }
 }

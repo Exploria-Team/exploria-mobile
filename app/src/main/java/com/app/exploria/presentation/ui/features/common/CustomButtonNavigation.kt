@@ -10,33 +10,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomButtonNavigation(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
-    modifier: Modifier = Modifier
+    iconColor: Color = MaterialTheme.colorScheme.onSurface,
 ) {
-    val color = MaterialTheme.colorScheme
-
     Box(
         modifier = modifier
             .size(40.dp)
             .clip(CircleShape)
-            .background(color.surface)
-            .graphicsLayer(
-                shadowElevation = 3f,
-                shape = CircleShape,
-                clip = true
-            ),
+            .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = icon,
             contentDescription = "Navigation Button",
-            tint = color.onSurface
+            tint = iconColor
         )
     }
 }

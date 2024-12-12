@@ -6,8 +6,6 @@ import com.app.exploria.data.remote.request.PlanDestinationRequest
 import com.app.exploria.data.remote.request.PlanRequest
 import com.app.exploria.data.remote.request.PreferencesRequest
 import com.app.exploria.data.remote.request.RegisterRequest
-import com.app.exploria.data.remote.request.ReviewRequest
-import com.app.exploria.data.remote.request.UserDataRequest
 import com.app.exploria.data.remote.response.DistanceModelResponse
 import com.app.exploria.data.remote.response.GetAllDestinationResponse
 import com.app.exploria.data.remote.response.GetAllUserFavoriteResponse
@@ -26,14 +24,17 @@ import com.app.exploria.data.remote.response.PostPlanResponse
 import com.app.exploria.data.remote.response.PostReviewResponse
 import com.app.exploria.data.remote.response.PreferenceResponse
 import com.app.exploria.data.remote.response.RegisterResponse
-import com.app.exploria.data.remote.response.SearchDestinationData
 import com.app.exploria.data.remote.response.SearchDestinationResponse
 import com.app.exploria.data.remote.response.SearchTourGuideResponse
 import com.app.exploria.data.remote.response.UserDataResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -51,10 +52,14 @@ interface ApiService {
         @Path("id") id: Int
     ): UserDataResponse
 
+    @Multipart
     @PUT("user/{id}")
     suspend fun updateUser(
         @Path("id") id: Int,
-        @Body userDataRequest: UserDataRequest
+        @Part("name") name: RequestBody?,
+        @Part("email") email: RequestBody?,
+        @Part profilePicture: MultipartBody.Part?,
+        @Part("age") age: RequestBody?
     ): UserDataResponse
 
     @POST("user/favorite")
@@ -94,9 +99,13 @@ interface ApiService {
         @Query("size") size: Int,
     ): GetReviewResponse
 
+    @Multipart
     @POST("review")
     suspend fun submitReview(
-        @Body reviewRequest: ReviewRequest
+        @Part("destinationId") destinationId: RequestBody,
+        @Part("reviewText") reviewText: RequestBody,
+        @Part("rating") rating: RequestBody,
+        @Part photo: MultipartBody.Part?
     ): PostReviewResponse
 
     // Tour Guide
@@ -129,10 +138,12 @@ interface ApiService {
     suspend fun getNormalModel(
         @Query("page") page: Int,
         @Query("size") size: Int,
-    ) : NormalModelResponse
+    ): NormalModelResponse
 
     @GET("recommendation/distance-hybrid/{id}")
     suspend fun getDistanceModel(
         @Path("id") id: Int,
-    ) : DistanceModelResponse
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): DistanceModelResponse
 }

@@ -1,5 +1,6 @@
 package com.app.exploria.presentation.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.app.exploria.data.remote.response.PostReviewData
@@ -13,14 +14,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ReviewViewModel @Inject constructor(private val reviewRepository: ReviewRepository) : BaseViewModel() {
+class ReviewViewModel @Inject constructor(private val reviewRepository: ReviewRepository) :
+    BaseViewModel() {
 
-    private val _submitReviewResult = MutableStateFlow<Result<PostReviewData>?>(null)
-    val submitReviewResult: StateFlow<Result<PostReviewData>?> = _submitReviewResult
+    private val _submitReview = MutableStateFlow<Result<PostReviewData>?>(null)
+    val submitReview: StateFlow<Result<PostReviewData>?> = _submitReview
 
     private val _reviewData = MutableStateFlow<PagingData<ReviewsItem>>(PagingData.empty())
     val reviewData: StateFlow<PagingData<ReviewsItem>> get() = _reviewData
-
 
     fun getReviews(id: Int) {
         setLoading(true)
@@ -32,26 +33,28 @@ class ReviewViewModel @Inject constructor(private val reviewRepository: ReviewRe
         }
     }
 
-
-    // Fungsi untuk submit review
-    fun submitReview(destinationId: Int, reviewText: String, rating: Int) {
+    fun submitReview(destinationId: Int, reviewText: String, rating: Float, photoUri: Uri?) {
         setLoading(true)
         viewModelScope.launch {
             try {
-                val result = reviewRepository.submitReview(destinationId, reviewText, rating)
+                val result = reviewRepository.submitReview(
+                    destinationId,
+                    reviewText,
+                    rating.toInt(),
+                    photoUri
+                )
 
-                // Menyimpan hasil pengiriman review
-                _submitReviewResult.value = result
+                _submitReview.value = result
                 if (result.isSuccess) {
-                    clearErrorMessage()  // Jika sukses, clear error message
+                    clearErrorMessage()
                 } else {
-                    setErrorMessage(result.exceptionOrNull()?.message)  // Tampilkan pesan error jika gagal
+                    setErrorMessage(result.exceptionOrNull()?.message)
                 }
             } catch (e: Exception) {
-                _submitReviewResult.value = Result.failure(e)  // Menangani error dengan baik
-                setErrorMessage(e.message)  // Menampilkan pesan error
+                _submitReview.value = Result.failure(e)
+                setErrorMessage(e.message)
             } finally {
-                setLoading(false)  // Pastikan loading selesai setelah request selesai
+                setLoading(false)
             }
         }
     }

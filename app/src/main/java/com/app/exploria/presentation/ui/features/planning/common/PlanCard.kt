@@ -1,7 +1,8 @@
 package com.app.exploria.presentation.ui.features.planning.common
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,22 +16,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun PlanCard(planName: String) {
+fun PlanCard(navController: NavController? = null, planName: String, planid: String? = null) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
-            .padding(16.dp),
+            .padding(vertical = 16.dp)
+            .clickable {  navController?.navigate("second_planning_screen/${planid}") }
+        ,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF4A636E)) // Dark grayish blue color
     ) {
 
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Text(

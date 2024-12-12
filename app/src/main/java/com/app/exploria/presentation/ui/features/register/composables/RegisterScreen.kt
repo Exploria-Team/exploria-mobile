@@ -50,9 +50,11 @@ fun RegisterScreen(navController: NavController, mainViewModel: MainViewModel) {
 
 
     LaunchedEffect(userModel) {
-        if (userModel != null && userModel!!.isLogin) {
-            navController.navigate(Screen.Survey.route) {
-                popUpTo(Screen.Register.route) { inclusive = true }
+        userModel?.let {
+            if (it.isLogin) {
+                navController.navigate(Screen.Survey.route) {
+                    popUpTo(Screen.Register.route) { inclusive = true }
+                }
             }
         }
     }
