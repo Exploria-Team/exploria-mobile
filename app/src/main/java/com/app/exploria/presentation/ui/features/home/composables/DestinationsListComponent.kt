@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.exploria.presentation.ui.features.common.ItemList
 import com.app.exploria.presentation.viewModel.DestinationViewModel
+import com.app.exploria.presentation.viewModel.UserFavoriteViewModel
 
 @Composable
 fun DestinationsListComponent(
@@ -30,6 +31,7 @@ fun DestinationsListComponent(
     modifier: Modifier = Modifier,
 ) {
     val destinationViewModel: DestinationViewModel = hiltViewModel()
+    val favoriteViewModel: UserFavoriteViewModel = hiltViewModel()
     val destinations = destinationViewModel.destinations.collectAsLazyPagingItems()
     val loading = destinationViewModel.isLoading.collectAsState()
     val error = destinationViewModel.errorMessage.collectAsState()
@@ -77,7 +79,8 @@ fun DestinationsListComponent(
                             destination = destination,
                             getId = { it?.id },
                             getName = { it?.name },
-                            getPhotoUrls = { it?.photoUrls }
+                            getPhotoUrls = { it?.photoUrls },
+                            favoriteViewModel = favoriteViewModel
                         )
                     }
                 }

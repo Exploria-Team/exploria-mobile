@@ -43,7 +43,6 @@ fun PlanningScreen(navController: NavController) {
     val travelPlanViewModel: TravelPlanViewModel = hiltViewModel()
     val postPlanResult = travelPlanViewModel.postPlanResult.collectAsState()
 
-    // Handle result from postPlan
     LaunchedEffect(postPlanResult.value) {
         postPlanResult.value?.let { planData ->
             if (planData.id != null) {
@@ -97,7 +96,7 @@ fun PlanningScreen(navController: NavController) {
                     CustomTextField(
                         value = nameState.value,
                         onValueChange = { nameState.value = it },
-                        label = "Name Plan",
+                        label = "Masukkan Nama Rencana mu",
                         icon = Icons.Default.Create
                     )
                     SimpleDateRangePicker(showRangeModal, selectedDateRange, totalDays)
@@ -120,7 +119,7 @@ fun PlanningScreen(navController: NavController) {
 
                         if (nameState.value.text.isNotBlank() && startDate != null && endDate != null) {
                             val formattedStartDate = SimpleDateFormat("yyyy-MM-dd").format(Date(startDate))
-                            val formattedEndDate = SimpleDateFormat("yyyy-MM-dd").format(Date(endDate))
+                            val formattedEndDate = SimpleDateFormat("yyyy-MM-dd").format(   Date(endDate))
 
                             travelPlanViewModel.postPlan(
                                 name = nameState.value.text,

@@ -1,3 +1,4 @@
+
 package com.app.exploria.presentation.ui.features.detail.composables
 
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.features.common.CustomButton
+import com.app.exploria.presentation.ui.navigation.Screen
 import com.app.exploria.presentation.viewModel.ReviewViewModel
 
 @Composable
@@ -49,7 +51,8 @@ fun ReviewFragment(navController: NavController, id: Int, userModel: UserModel?)
                     CustomButton(
                         "review",
                         width = 100,
-                        textStyle = MaterialTheme.typography.titleMedium
+                        textStyle = MaterialTheme.typography.titleMedium,
+                            onClick = { navController.navigate("reviewForm/${id}") }
                     )
                 }
             }
@@ -67,11 +70,18 @@ fun ReviewFragment(navController: NavController, id: Int, userModel: UserModel?)
             }
         }
 
-        items(reviews.itemCount) { item ->
-            reviews[item]?.let {
-                ReviewCard(review = it)
+        if (reviews.itemCount > 0) {
+            items(reviews.itemCount) { index ->
+                reviews[index]?.let { review ->
+                    ReviewCard(review = review)
+                }
+            }
+        } else {
+            item {
+                Text("No reviews available.")
             }
         }
+
 
         if (reviews.loadState.append is LoadState.Error) {
             item {

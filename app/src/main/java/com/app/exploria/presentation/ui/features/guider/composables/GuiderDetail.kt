@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -129,10 +130,18 @@ fun DetailContent(
     context: android.content.Context,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            ProfileSection(tourGuide)
-            Spacer(modifier = Modifier.height(16.dp))
-            DescriptionSection(tourGuide)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            item {
+                ProfileSection(tourGuide)
+            }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            item {
+                DescriptionSection(tourGuide)
+            }
         }
 
         BookingSection(
@@ -292,7 +301,7 @@ fun BookingSection(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(top = 16.dp, end = 16.dp, start = 16.dp),
         ) {
             Text(
                 text = "Booking ${tourGuide.name} menjadi pemandu mu",

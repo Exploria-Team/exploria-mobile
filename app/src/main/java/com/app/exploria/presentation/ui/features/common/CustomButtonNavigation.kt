@@ -11,28 +11,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomButtonNavigation(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     iconColor: Color = MaterialTheme.colorScheme.onSurface,
-    modifier: Modifier = Modifier
 ) {
-    val color = MaterialTheme.colorScheme
-
     Box(
         modifier = modifier
             .size(40.dp)
             .clip(CircleShape)
-            .background(color.surface)
-            .graphicsLayer(
-                shadowElevation = 3f,
-                shape = CircleShape,
-                clip = true
-            ),
+            .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center
     ) {
         Icon(

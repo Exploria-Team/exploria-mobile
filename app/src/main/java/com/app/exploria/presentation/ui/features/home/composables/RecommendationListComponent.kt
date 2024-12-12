@@ -20,11 +20,14 @@ import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.app.exploria.presentation.ui.features.common.ItemList
 import com.app.exploria.presentation.viewModel.ModelViewModel
+import com.app.exploria.presentation.viewModel.UserFavoriteViewModel
 
 @Composable
 fun RecomendationListComponent(navController: NavController, modifier: Modifier = Modifier) {
     val modelViewModel: ModelViewModel = hiltViewModel()
     val modelData = modelViewModel.normalModelData.collectAsLazyPagingItems()
+    val favoriteViewModel: UserFavoriteViewModel = hiltViewModel()
+
 
     LaunchedEffect(Unit) {
         modelViewModel.fetchNormalModel()
@@ -49,7 +52,8 @@ fun RecomendationListComponent(navController: NavController, modifier: Modifier 
                             destination = data,
                             getId = { it?.id },
                             getName = { it?.name },
-                            getPhotoUrls = { it?.photos }
+                            getPhotoUrls = { it?.photos },
+                            favoriteViewModel = favoriteViewModel
                         )
                     }
                 }

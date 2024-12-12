@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AddDestinationButton(onClick: () -> Unit) {
+fun AddDestinationButton(onClick: () -> Unit, text: String) {
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -41,7 +41,7 @@ fun AddDestinationButton(onClick: () -> Unit) {
                 tint = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "Tambah Tempat",
+                text = text,
                 color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.titleMedium
             )

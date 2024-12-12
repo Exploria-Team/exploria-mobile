@@ -63,7 +63,7 @@ fun BodyDetailComponent(navController: NavController, destinationData: GetDestin
     }
 
     when (selectedTab) {
-        0 -> DetailFragment(description = destinationData.data.description)
+        0 -> DetailFragment(data = destinationData.data)
         1 -> ReviewFragment(id = destinationData.data.id, navController = navController, userModel = userModel)
         2 -> MapFragment(lat = destinationData.data.lat, lon = destinationData.data.lon)
     }
