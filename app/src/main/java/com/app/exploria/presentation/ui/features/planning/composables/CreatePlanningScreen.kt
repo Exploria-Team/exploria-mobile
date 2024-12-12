@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +31,8 @@ import com.app.exploria.presentation.viewModel.TravelPlanViewModel
 fun CreatePlanningScreen(navController: NavController, user: UserModel?) {
     val travelPlanViewModel: TravelPlanViewModel = hiltViewModel()
     val plan = travelPlanViewModel.plans.collectAsState().value
+    val loading = travelPlanViewModel.isLoading.collectAsState()
+    val error = travelPlanViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(Unit) {
         travelPlanViewModel.getPlans()
@@ -63,20 +66,39 @@ fun CreatePlanningScreen(navController: NavController, user: UserModel?) {
                     style = MaterialTheme.typography.titleMedium
                 )
 
-                LazyColumn(modifier = Modifier.padding(16.dp)) {
+                if (loading.value) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                } else if (error.value?.isNotEmpty() == true) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = error.value!!, style = MaterialTheme.typography.bodyLarge)
+                    }
+                } else {
+                    LazyColumn(modifier = Modifier.padding(16.dp)) {
 
-                    items(plan.size) { item ->
-                        plan[item].let {
-                            PlanCard(navController, it.name, it.id)
+                        items(plan.size) { item ->
+                            plan[item].let {
+                                PlanCard(navController, it.name, it.id)
+                            }
+                        }
+                        item {
+                            AddDestinationButton(onClick = { navController.navigate(Screen.Plan.route) }, text = "Tambah Rencana")
                         }
                     }
-                    item {
-                        AddDestinationButton(onClick = { navController.navigate(Screen.Plan.route) })
-                    }
+
                 }
-
             }
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
