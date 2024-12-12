@@ -12,15 +12,14 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.app.exploria.presentation.ui.navigation.Screen
 import com.app.exploria.presentation.viewModel.UserFavoriteViewModel
@@ -33,32 +32,32 @@ fun <T> ItemList(
     modifier: Modifier = Modifier,
     getId: (T?) -> Int?,
     getName: (T?) -> String?,
-    getPhotoUrls: (T?) -> List<String>?
+    getPhotoUrls: (T?) -> List<String>?,
+    favoriteViewModel: UserFavoriteViewModel
 ) {
-    val id = getId(destination)
-    val favoriteViewModel: UserFavoriteViewModel = hiltViewModel()
-    val isFavorite = favoriteViewModel.favoriteItem.collectAsState().value.any { it.destination.id == id }
+    val id = getId(destination) ?: return
+
+    val favoriteItems = favoriteViewModel.favorites.collectAsState().value
+    val isFavorite = favoriteItems.any { it.destination.id == id }
 
     Box(
         modifier = modifier
             .size(180.dp)
+            .clip(RoundedCornerShape(16.dp))
             .clickable {
                 navController.navigate("detail/$id") {
                     launchSingleTop = true
                     popUpTo(Screen.Home.route) { inclusive = false }
                 }
             }
-            .clip(RoundedCornerShape(16.dp))
     ) {
-        getPhotoUrls(destination)?.let { photos ->
-            if (photos.isNotEmpty()) {
-                GlideImage(
-                    imageModel = photos[0],
-                    contentDescription = getName(destination),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }
+        getPhotoUrls(destination)?.firstOrNull()?.let { photo ->
+            GlideImage(
+                imageModel = photo,
+                contentDescription = getName(destination),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
 
         getName(destination)?.let { name ->
@@ -80,12 +79,16 @@ fun <T> ItemList(
             CustomButtonNavigation(
                 icon = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                 iconColor = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.clickable {
-                    id?.let { favoriteViewModel.toggleFavorite(it) }
-                }
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable(
+                        onClick = {
+                            favoriteViewModel.toggleFavorite(id)
+                        },
+                        indication = null,
+                        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+                    )
             )
-
         }
     }
 }
-
