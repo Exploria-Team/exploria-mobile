@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.app.exploria.presentation.ui.features.detail.composables.DetailScreen
+import com.app.exploria.presentation.ui.features.detail.composables.ReviewFormScreen
 import com.app.exploria.presentation.ui.features.favorite.composables.FavoriteScreen
 import com.app.exploria.presentation.ui.features.guider.composables.GuideListScreen
 import com.app.exploria.presentation.ui.features.guider.composables.GuiderDetailScreen
@@ -46,7 +47,7 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             LaunchedEffect(Unit) {
                 delay(2000)
                 navController.navigate(Screen.Home.route) {
-                    popUpTo(Screen.Splash.route) {inclusive = true}
+                    popUpTo(Screen.Splash.route) { inclusive = true }
                     launchSingleTop = true
                     restoreState = true
                 }
@@ -75,7 +76,11 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         ) { backStackEntry ->
             val planId = backStackEntry.arguments?.getString("planId") ?: ""
             val destinationId = backStackEntry.arguments?.getString("destinationId")?.toIntOrNull()
-            SelectDestinationScreen(navController = navController, planId = planId, destinationId = destinationId)
+            SelectDestinationScreen(
+                navController = navController,
+                planId = planId,
+                destinationId = destinationId
+            )
         }
 
         composable(
@@ -85,7 +90,11 @@ fun AppNavigation(mainViewModel: MainViewModel) {
             )
         ) { backStackEntry ->
             val planId = backStackEntry.arguments?.getString("planId") ?: ""
-            SelectDestinationScreen(navController = navController, planId = planId, destinationId = null)
+            SelectDestinationScreen(
+                navController = navController,
+                planId = planId,
+                destinationId = null
+            )
         }
 
         composable(Screen.CreatePlan.route) { CreatePlanningScreen(navController, userState) }
@@ -106,5 +115,12 @@ fun AppNavigation(mainViewModel: MainViewModel) {
         composable(Screen.Search.route) { SearchScreen(navController) }
         composable(Screen.Guide.route) { GuideListScreen(navController) }
         composable(Screen.ProfileForm.route) { ProfileForm(navController, mainViewModel) }
+        composable(
+            route = Screen.ReviewForm.route,
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val destinationId = navBackStackEntry.arguments?.getString("id")
+            ReviewFormScreen(destinationId, navController)
+        }
     }
 }

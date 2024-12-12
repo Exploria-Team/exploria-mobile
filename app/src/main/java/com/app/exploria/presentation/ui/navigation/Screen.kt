@@ -17,4 +17,5 @@ sealed class Screen(val route: String) {
     object Guide : Screen("guide")
     object Splash : Screen("splash")
     object ProfileForm : Screen("profileForm")
+    object ReviewForm : Screen("reviewForm/{id}")
 }
