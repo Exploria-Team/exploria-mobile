@@ -35,7 +35,6 @@ fun ProfileScreen(
     navController: NavController, mainViewModel: MainViewModel
 ) {
     val profileViewModel: ProfileViewModel = hiltViewModel()
-    val userData by profileViewModel.userData.collectAsState()
     val user by mainViewModel.user.collectAsState()
     val userModel by mainViewModel.userModel.collectAsState()
 
@@ -68,30 +67,27 @@ fun ProfileScreen(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (userData?.profilePictureUrl.isNullOrEmpty()) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profiledefault),
-                        contentDescription = "Profile Picture",
+                if (userModel?.profilePictureUrl?.isNotEmpty() == true) {
+                    GlideImage(
+                        imageModel = userModel?.profilePictureUrl!!,
+                        contentDescription = userModel?.name,
                         modifier = Modifier
                             .padding(bottom = 8.dp)
                             .size(130.dp)
                             .clip(CircleShape)
                     )
                 } else {
-                    userModel?.let {
-                        it.profilePictureUrl?.let { data ->
-                            GlideImage(
-                                imageModel = data,
-                                contentDescription = userModel!!.name,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                                    .size(130.dp)
-                                    .clip(CircleShape)
-                            )
-                        }
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.profiledefault),
+                        contentDescription = "Foto Profil",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .size(130.dp)
+                            .clip(CircleShape)
+                    )
                 }
+
                 userModel?.name?.let {
                     Text(
                         text = it,
