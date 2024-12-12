@@ -3,6 +3,7 @@ package com.app.exploria.data.repositories
 import com.app.exploria.data.remote.api.ApiService
 import com.app.exploria.data.remote.request.PlanDestinationRequest
 import com.app.exploria.data.remote.request.PlanRequest
+import com.app.exploria.data.remote.response.GetPlanDestinationByIdDestination
 import com.app.exploria.data.remote.response.GetPlanDestinationByIdResponseItem
 import com.app.exploria.data.remote.response.GetPlansResponseItem
 import com.app.exploria.data.remote.response.PostPlanData
@@ -45,8 +46,8 @@ class TravelPlanRepository @Inject constructor(@Named("ApiServiceWithToken") pri
         return try {
             val response = apiService.getPlanById(id)
 
-            if (response.isNotEmpty()) {
-                Result.success(response)
+            if (response.statusCode == 200) {
+                Result.success(response.data)
             } else {
                 Result.failure(Exception("No plans available"))
             }
