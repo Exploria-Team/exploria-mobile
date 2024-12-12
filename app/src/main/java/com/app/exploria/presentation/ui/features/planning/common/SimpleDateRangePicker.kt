@@ -13,10 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -26,28 +23,30 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun SimpleDateRangePicker() {
-    var showRangeModal by remember { mutableStateOf(false) }
-    var selectedDateRange by remember { mutableStateOf<Pair<Long?, Long?>>(null to null) }
-    var totalDays by remember { mutableStateOf(0) }
-
+fun SimpleDateRangePicker(
+    showRangeModal: MutableState<Boolean>,
+    selectedDateRange: MutableState<Pair<Long?, Long?>>,
+    totalDays: MutableState<Int>
+) {
     Column(
-        modifier = Modifier
-            .padding(16.dp),
+        modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Pilih Rentang Tanggal:")
-        Button(onClick = { showRangeModal = true }) {
+
+        Button(onClick = { showRangeModal.value = true }) {
             Text("Pilih Rentang Tanggal")
         }
 
-        if (selectedDateRange.first != null && selectedDateRange.second != null) {
-            val startDate = Date(selectedDateRange.first!!)
-            val endDate = Date(selectedDateRange.second!!)
+        if (selectedDateRange.value.first != null && selectedDateRange.value.second != null) {
+            val startDate = Date(selectedDateRange.value.first!!)
+            val endDate = Date(selectedDateRange.value.second!!)
             val formattedStartDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(startDate)
             val formattedEndDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(endDate)
-            totalDays = ((selectedDateRange.second!! - selectedDateRange.first!!) / (1000 * 60 * 60 * 24)).toInt() + 1
+
+            totalDays.value =
+                ((selectedDateRange.value.second!! - selectedDateRange.value.first!!) / (1000 * 60 * 60 * 24)).toInt() + 1
 
             Text(
                 text = "Rentang Tanggal Terpilih:\n$formattedStartDate - $formattedEndDate",
@@ -55,7 +54,7 @@ fun SimpleDateRangePicker() {
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "Jumlah Hari: $totalDays",
+                text = "Jumlah Hari: ${totalDays.value}",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -68,13 +67,13 @@ fun SimpleDateRangePicker() {
         }
     }
 
-    if (showRangeModal) {
+    if (showRangeModal.value) {
         DateRangePickerModal(
             onDateRangeSelected = {
-                selectedDateRange = it
-                showRangeModal = false
+                selectedDateRange.value = it
+                showRangeModal.value = false
             },
-            onDismiss = { showRangeModal = false }
+            onDismiss = { showRangeModal.value = false }
         )
     }
 }

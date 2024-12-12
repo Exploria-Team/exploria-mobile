@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+vcs.xml
+.name
+/secrets.properties

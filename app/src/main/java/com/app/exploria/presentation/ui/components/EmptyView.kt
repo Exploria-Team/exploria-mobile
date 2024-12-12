@@ -21,8 +21,9 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.exploria.R
 
 @Composable
-fun EmptyView(message: String) {
+fun EmptyView(message: String, isError: Boolean = false) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_search))
+
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -35,7 +36,7 @@ fun EmptyView(message: String) {
         ) {
             LottieAnimation(
                 composition,
-                modifier = Modifier.size(350.dp),
+                modifier = Modifier.size(200.dp),
                 restartOnPlay = true,
                 alignment = Alignment.Center,
                 iterations = 100,
@@ -45,7 +46,8 @@ fun EmptyView(message: String) {
                 modifier = Modifier
                     .padding(top = 10.dp),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium
+                style = if (isError) MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.error)
+                else MaterialTheme.typography.titleMedium
             )
         }
     }

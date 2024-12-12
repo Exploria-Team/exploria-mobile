@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,10 +35,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.exploria.R
+import com.app.exploria.data.models.userData.UserModel
 import com.app.exploria.presentation.ui.features.common.NavigationBottom
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, user: UserModel?) {
     val context = LocalContext.current
     val activity = context as? Activity
     var showExitDialog by remember { mutableStateOf(false) }
@@ -48,10 +50,12 @@ fun HomeScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            HeaderComponent(navController = navController)
+            Box(modifier = Modifier.padding(top = 16.dp)) {
+                HeaderComponent(navController = navController, user = user)
+            }
         },
         bottomBar = {
-            NavigationBottom(navController = navController)
+            NavigationBottom(navController = navController, user = user)
         }
     ) { innerPadding: PaddingValues ->
         Box(
@@ -67,11 +71,11 @@ fun HomeScreen(navController: NavController) {
             ) {
                 BoxWithConstraints(
                     modifier = Modifier.fillMaxSize()
-
                 ) {
                     val maxHeight = this.maxHeight
                     val listState = rememberLazyListState()
                     val isDestinationListVisible = remember { mutableStateOf(false) }
+
 
                     LazyColumn(
                         modifier = Modifier
@@ -99,29 +103,26 @@ fun HomeScreen(navController: NavController) {
                                     BorderComponent(
                                         images = listOf(
                                             R.drawable.img2,
-                                            R.drawable.img2,
-                                            R.drawable.img2,
+                                            R.drawable.img1,
+                                            R.drawable.img3
                                         )
                                     )
-                                    PromoCardComponent(navController)
+                                    if (user?.isLogin == false) {
+                                        PromoCardComponent(navController)
+                                    } else {
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                    }
                                 }
                             }
                         }
 
-                        item {
-                            RecomendationListComponent(
-                                navController,
-
-                                recomendations = listOf(
-                                    R.drawable.img,
-                                    R.drawable.img2,
-                                    R.drawable.img2,
-                                    R.drawable.img2
-                                ),
-                                modifier = Modifier.padding(
-                                    horizontal = 16.dp
+                        if (user?.isLogin == true) {
+                            item {
+                                RecomendationListComponent(
+                                    navController,
+                                    modifier = Modifier.padding(horizontal = 16.dp)
                                 )
-                            )
+                            }
                         }
 
                         item {
@@ -136,24 +137,10 @@ fun HomeScreen(navController: NavController) {
                                     .height(maxHeight)
                             ) {
                                 DestinationsListComponent(
-                                    navController,
-
-                                    recomendations = listOf(
-                                        R.drawable.img,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2,
-                                        R.drawable.img2
-                                    ),
+                                    navController = navController,
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .padding(horizontal = 16.dp)
+                                        .padding(horizontal = 16.dp),
                                 )
                             }
                         }
@@ -162,6 +149,7 @@ fun HomeScreen(navController: NavController) {
             }
         }
     }
+
 
     if (showExitDialog) {
         AlertDialog(

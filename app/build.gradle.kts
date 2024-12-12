@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.dagger)
+    id("kotlin-parcelize")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -15,7 +18,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "BASE_URL", "\"https://exploria-backend-14669887025.asia-southeast2.run.app/api/v1/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -40,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -51,10 +55,19 @@ android {
     }
 }
 
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
+    ignoreList.add("keyToIgnore")
+    ignoreList.add("sdk.*")
+}
+
+
 dependencies {
 
     implementation(libs.androidx.ui.text.google.fonts)
-    implementation(libs.androidx.datastore.preferences)
+    implementation (libs.compose.ratingbar)
+    implementation(libs.coil.compose)
 
     //compose
     val composeBom = platform(libs.androidx.compose.bom)
@@ -70,6 +83,7 @@ dependencies {
     implementation(libs.google.android.material)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.navigation.compose)
 
     //test
     androidTestImplementation(libs.androidx.ui.test.junit4)
@@ -115,19 +129,10 @@ dependencies {
     implementation (libs.androidx.ui)
     implementation (libs.androidx.ui.test)
 
-
-    //Koin
-//    implementation(libs.koin.android)
-//    implementation(libs.koin.core)
-//    testImplementation(libs.koin.test)
-//    implementation(libs.koin.android)
-//    implementation(libs.koin.android.compat)
-//    testImplementation(libs.koin.test.junit4)
-
     //dagger
     implementation(libs.dagger.hilt)
+    implementation(libs.hilt.compose.navigation)
     kapt(libs.dagger.kapt)
-
 
     //Retrofit
     implementation(libs.retrofit)
@@ -140,12 +145,19 @@ dependencies {
     //Glide
     implementation(libs.landscapist.glide)
 
-    implementation(libs.androidx.navigation.compose)
-
     //room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.datastore.preferences)
+
+    //maps
+    implementation (libs.maps.compose)
+    implementation (libs.play.services.maps)
+
+    //Paging 3
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.room.paging)
 }
