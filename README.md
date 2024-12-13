@@ -1,3 +1,4 @@
+![file1](readmePicture/BannerMD.png)
 # Exploria Android Application Development
 
 Exploria is an Android-based application designed to enhance travel experiences while promoting sustainable tourism in Indonesia. By integrating advanced technologies like AI and machine learning into a mobile platform, this app provides smart, tailored recommendations, empowering travelers to explore Indonesia responsibly and meaningfully.
